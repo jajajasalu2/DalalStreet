@@ -17,7 +17,7 @@ trait ControllerScopes {
         if (empty($share)) {
             return 10;
         }
-        if ($amount == 0) {
+        if ($amount == 0 || $share->amount == 0) {
             return 12;
         }
         if ($share->amount < $amount) {
@@ -25,7 +25,7 @@ trait ControllerScopes {
         }
         else {
             $share->amount -= $amount;
-            if ($share->amount == 0) {
+            if ($share->amount == 0 && $share->short_sold == 0) {
                 $share->delete();
             }
             else {
@@ -93,13 +93,51 @@ trait ControllerScopes {
         return 0;
     }
 
+    public function short_sell($amount,$team_id,$company_id) {
+        $share = Share::where('team_id','=',$team_id)
+                        ->where('company_id','=',$company_id)
+                        ->first();
+        $team = Team::where('id','=',$team_id)->first();
+        $company = Company::where('id','=',$company_id)->first();
+        if (empty($share)) {
+            return 10;
+        }
+        if ($amount == 0) {
+            return 12;
+        }
+        if ($share->amount < $amount) {
+            return 11;
+        }
+        $share->amount -= $amount;
+        $share->short_sold += $amount;
+        $share->save();
+        return 0;
+    }
+
+    public function buy_back($amount,$team_id,$company_id) {
+        $share = Share::where('team_id','=',$team_id)
+                        ->where('company_id','=',$company_id)
+                        ->first();
+        $team = Team::where('id','=',$team_id)->first();
+        $company = Company::where('id','=',$company_id)->first();
+        if (empty($share)) {
+            return 10;
+        }
+        if ($share->short_sold < $amount) {
+            return 15;
+        }
+        $share->short_sold -= $amount;
+        $share->amount += $amount;
+    }
+
     public static function error($error_code) {
         $errors = [
             10 => 'You don\'t have a share in this company',
             11 => 'You don\'t have enough shares in this company',
             12 => 'Cant sell 0 shares',
             13 => 'Not enough balance',
-            14 => 'This company does not have enough shares'
+            14 => 'This company does not have enough shares',
+            15 => 'Haven\'t short sold enough shares'
         ];
         return $errors[$error_code];
     }

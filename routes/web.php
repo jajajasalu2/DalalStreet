@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::post('/create','TransactionController@create');
+
+Route::get('/flush','TransactionController@session_end');
