@@ -93,7 +93,7 @@ trait ControllerScopes {
         return 0;
     }
 
-    public function short_sell($amount,$team_id,$company_id) {
+    /*public function short_sell($amount,$team_id,$company_id) {
         $share = Share::where('team_id','=',$team_id)
                         ->where('company_id','=',$company_id)
                         ->first();
@@ -128,6 +128,31 @@ trait ControllerScopes {
         }
         $share->short_sold -= $amount;
         $share->amount += $amount;
+        $team->balance -= 
+    }*/
+
+    public function delete_shares($request) {
+        if ($request->input('delete_company')) {
+            $shares = Share::where('company_id','=',$request->input('company_id'));
+            //$shortsold_shares = ShortsoldShare::where('company_id','=',$request->input('company_id'));
+        }
+        else if($request->input('delete_team')) {
+            $shares = Share::where('team_id','=',$request->input('team_id'));
+            //$shortsold_shares = ShortsoldShare::where('team_id','=',$request->input('team_id'));
+        }
+        /*if (!empty($shortsold_shares)) {
+            $shortsold_shares = $shortsold_shares->get();
+            foreach ($shortsold_shares as $shortsold_share) {
+                $shortsold_share->delete();
+            }
+        }*/
+        if (!empty($shares)) {
+            $shares = $shares->get();
+            foreach ($shares as $share) {
+                $error_code = ControllerScopes::sell_share($share->team_id,$share->company_id,$share->amount);
+            }
+        }
+        return 0;
     }
 
     public static function error($error_code) {

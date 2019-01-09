@@ -11,10 +11,28 @@
 |
 */
 
+use App\Company;
+use App\Team;
+
 Route::get('/', function () {
-    return view('test');
+    $companies = Company::all();
+    $teams = Team::all();
+    return view('home')->with('companies',$companies)
+                       ->with('teams',$teams);
 });
 
 Route::post('/create','TransactionController@create');
 
 Route::get('/flush','TransactionController@session_end');
+
+Route::get('/transactions/{id}','TransactionController@show');
+
+Route::get('/delete/company/{id}','CompanyController@delete');
+
+Route::get('/edit/company/{id}','CompanyController@edit');
+
+Route::get('/create/company','CompanyController@create');
+
+Route::post('/update/company','CompanyController@update');  
+
+Route::get('/admin','AdminController@dashboard');

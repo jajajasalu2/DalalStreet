@@ -8,13 +8,24 @@
             <div class="card">
                 <div class="card-body">
                 {!!Form::open(['action'=>'TransactionController@create','method'=>'POST','enctype'=>'multipart/form-data'])!!}
-                
-                {{Form::text('company_id','',['class'=>'form_control','placeholder'=>'Company ID'])}}
-                {{Form::text('team_id','',['class'=>'form_control','placeholder'=>'Team ID'])}}
+                <select name="company_id">
+                    @foreach ($companies as $company)
+                        <option value={{$company->id}}>{{$company->name}}</option>
+                    @endforeach
+                </select>
+                <select name="team_id">
+                    @foreach ($teams as $team)
+                        <option value={{$team->id}}>{{$team->id}}</option>
+                    @endforeach
+                </select>
                 {{Form::text('amount','',['class'=>'form_control','placeholder'=>'Amount'])}}
-                {{Form::text('buy_sell','',['class'=>'form_control','placeholder'=>'Buy Sell'])}}
+                <select name="buy_sell">
+                    <option value=1>Buy</option>
+                    <option value=2>Sell</option>
+                    <option value=3>Buy back</option>
+                    <option value=4>Short sell</option>
+                </select>
                 {{Form::submit('Commit',['class'=>'btn btn-primary'])}}
-
                 {!!Form::close()!!}
                 </div>
             </div>

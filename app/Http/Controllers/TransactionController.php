@@ -28,7 +28,7 @@ class TransactionController extends Controller
                                 $request->input('amount'));
         }
         else if ($request->input('buy_sell') == 2){
-            $sell = ControllerScopes::sell_share($request->input('team_id'),
+            $error_code = ControllerScopes::sell_share($request->input('team_id'),
                                 $request->input('company_id'),
                                 $request->input('amount'));
         }
@@ -54,8 +54,13 @@ class TransactionController extends Controller
         $transaction->amount = $request->input('amount');
         $transaction->buy_sell = $request->input('buy_sell');
         $transaction->save();
-        //return 'done';
         return back()->with('success','Transaction completed successfully');
+    }
+
+    public function show($team_id) {
+        $transactions = Transaction::where('team_id','=',$team_id)->get();
+        return view('transactions')->with('transactions',$transactions)
+                                    ->with('team_id',$team_id);
     }
 
     public function session_end() {
