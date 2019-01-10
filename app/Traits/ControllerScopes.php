@@ -131,7 +131,7 @@ trait ControllerScopes {
         $team->balance -= 
     }*/
 
-    public function delete_shares($request) {
+    public static function delete_shares($request) {
         if ($request->input('delete_company')) {
             $shares = Share::where('company_id','=',$request->input('company_id'));
             //$shortsold_shares = ShortsoldShare::where('company_id','=',$request->input('company_id'));

@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
+    <a class="btn btn-default" href="/create/company">Create Company</a>
             <div class="card">
             <div class="col-md-8">
                 <div class="card-body">
@@ -10,7 +11,11 @@
                 <h2>{{$company->id}}</h2>
                 <p>{{$company->name}}</p>
                 <a class="btn btn-default" href="/edit/company/{{$company->id}}">Edit</a>
-                <a class="btn btn-danger" href="/delete/company/{{$company->id}}">Delete</a>
+                {!!Form::open(['action'=>'CompanyController@delete','method'=>'POST','enctype'=>'multipart/form-data'])!!}
+                {{Form::hidden('company_id',$company->id)}}
+                {{Form::hidden('delete_company',1)}}
+                {{Form::submit('Delete',['class'=>'btn btn-danger'])}}
+                {!!Form::close()!!}
                 <hr/>
                 @endforeach
                 </div>
