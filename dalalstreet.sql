@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 18, 2018 at 08:18 AM
+-- Generation Time: Jan 10, 2019 at 08:07 AM
 -- Server version: 5.7.24-0ubuntu0.16.04.1
--- PHP Version: 7.2.12-1+ubuntu16.04.1+deb.sury.org+1
+-- PHP Version: 7.2.13-1+ubuntu16.04.1+deb.sury.org+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -32,16 +32,57 @@ CREATE TABLE `companies` (
   `value` float DEFAULT NULL,
   `no_of_shares` int(11) DEFAULT NULL,
   `rate` float DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `companies`
 --
 
-INSERT INTO `companies` (`id`, `name`, `value`, `no_of_shares`, `rate`, `updated_at`) VALUES
-(1, 'apple', 50000, 205, 110.624, '2018-12-15 12:46:56'),
-(2, 'flipkart', 40000, 200, 50, NULL);
+INSERT INTO `companies` (`id`, `name`, `value`, `no_of_shares`, `rate`, `updated_at`, `type`) VALUES
+(1, 'ball', 1000000, 20000, 150.536, '2019-01-09 07:49:30', 'FOREX'),
+(2, 'NIGGER', 30000, 4997, 201.464, '2018-12-27 07:34:08', 'FOREX');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `company_bonuses`
+--
+
+CREATE TABLE `company_bonuses` (
+  `company_id` int(11) NOT NULL,
+  `bonus` float NOT NULL,
+  `shares_per_bonus` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `company_bonuses`
+--
+
+INSERT INTO `company_bonuses` (`company_id`, `bonus`, `shares_per_bonus`) VALUES
+(1, 5000, 3),
+(2, 4000, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `company_dividends`
+--
+
+CREATE TABLE `company_dividends` (
+  `company_id` int(11) NOT NULL,
+  `dividend` float NOT NULL,
+  `shares_per_dividend` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `company_dividends`
+--
+
+INSERT INTO `company_dividends` (`company_id`, `dividend`, `shares_per_dividend`) VALUES
+(1, 4000, 2),
+(2, 1000, 2);
 
 -- --------------------------------------------------------
 
@@ -63,8 +104,22 @@ CREATE TABLE `shares` (
 --
 
 INSERT INTO `shares` (`amount`, `company_id`, `team_id`, `updated_at`, `created_at`, `id`) VALUES
-(1, 1, 1, '2018-12-15', '2018-12-15', 5),
-(5, 1, 2, '2018-12-15', '2018-12-15', 6);
+(4, 1, 2, '2018-12-27', '2018-12-27', 2),
+(3, 2, 1, '2018-12-27', '2018-12-27', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shortsold_shares`
+--
+
+CREATE TABLE `shortsold_shares` (
+  `share_id` int(11) NOT NULL,
+  `amount` int(11) NOT NULL,
+  `rate` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -83,8 +138,8 @@ CREATE TABLE `teams` (
 --
 
 INSERT INTO `teams` (`id`, `balance`, `updated_at`) VALUES
-(1, 9830.91, '2018-12-15 12:46:45'),
-(2, 9493.94, '2018-12-15 12:46:56');
+(1, 23347.1, '2019-01-09 02:40:31'),
+(2, 18000, '2018-12-27 07:59:04');
 
 -- --------------------------------------------------------
 
@@ -107,21 +162,18 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`amount`, `buy_sell`, `date`, `company_id`, `team_id`, `updated_at`, `created_at`) VALUES
-(1, 1, '2018-12-15 18:08:17', 1, 1, '2018-12-15 12:38:17', '2018-12-15 12:38:17'),
-(1, 1, '2018-12-15 18:08:21', 1, 2, '2018-12-15 12:38:21', '2018-12-15 12:38:21'),
-(1, 1, '2018-12-15 18:08:34', 1, 1, '2018-12-15 12:38:34', '2018-12-15 12:38:34'),
-(1, 1, '2018-12-15 18:08:39', 1, 2, '2018-12-15 12:38:39', '2018-12-15 12:38:39'),
-(1, 1, '2018-12-15 18:08:46', 1, 2, '2018-12-15 12:38:46', '2018-12-15 12:38:46'),
-(1, 1, '2018-12-15 18:08:49', 1, 2, '2018-12-15 12:38:49', '2018-12-15 12:38:49'),
-(1, 1, '2018-12-15 18:08:52', 1, 1, '2018-12-15 12:38:52', '2018-12-15 12:38:52'),
-(1, 1, '2018-12-15 18:08:55', 1, 1, '2018-12-15 12:38:55', '2018-12-15 12:38:55'),
-(1, 1, '2018-12-15 18:14:51', 1, 1, '2018-12-15 12:44:51', '2018-12-15 12:44:51'),
-(1, 1, '2018-12-15 18:15:02', 1, 1, '2018-12-15 12:45:02', '2018-12-15 12:45:02'),
-(1, 0, '2018-12-15 18:16:10', 1, 1, '2018-12-15 12:46:10', '2018-12-15 12:46:10'),
-(1, 0, '2018-12-15 18:16:28', 1, 1, '2018-12-15 12:46:28', '2018-12-15 12:46:28'),
-(1, 0, '2018-12-15 18:16:37', 1, 1, '2018-12-15 12:46:37', '2018-12-15 12:46:37'),
-(1, 0, '2018-12-15 18:16:45', 1, 1, '2018-12-15 12:46:45', '2018-12-15 12:46:45'),
-(1, 1, '2018-12-15 18:16:56', 1, 2, '2018-12-15 12:46:56', '2018-12-15 12:46:56');
+(1, 1, '2018-12-27 13:03:32', 1, 1, '2018-12-27 07:33:32', '2018-12-27 07:33:32'),
+(1, 1, '2018-12-27 13:03:37', 1, 1, '2018-12-27 07:33:37', '2018-12-27 07:33:37'),
+(1, 1, '2018-12-27 13:03:40', 1, 1, '2018-12-27 07:33:40', '2018-12-27 07:33:40'),
+(1, 1, '2018-12-27 13:03:44', 1, 2, '2018-12-27 07:33:44', '2018-12-27 07:33:44'),
+(1, 1, '2018-12-27 13:03:50', 1, 2, '2018-12-27 07:33:50', '2018-12-27 07:33:50'),
+(1, 1, '2018-12-27 13:03:53', 1, 2, '2018-12-27 07:33:53', '2018-12-27 07:33:53'),
+(1, 1, '2018-12-27 13:03:56', 1, 2, '2018-12-27 07:33:56', '2018-12-27 07:33:56'),
+(1, 1, '2018-12-27 13:04:01', 2, 1, '2018-12-27 07:34:01', '2018-12-27 07:34:01'),
+(1, 1, '2018-12-27 13:04:04', 2, 1, '2018-12-27 07:34:04', '2018-12-27 07:34:04'),
+(1, 1, '2018-12-27 13:04:08', 2, 1, '2018-12-27 07:34:08', '2018-12-27 07:34:08'),
+(1, 1, '2019-01-09 08:08:18', 1, 1, '2019-01-09 02:38:18', '2019-01-09 02:38:18'),
+(2, 2, '2019-01-09 08:10:32', 1, 1, '2019-01-09 02:40:32', '2019-01-09 02:40:32');
 
 --
 -- Indexes for dumped tables
@@ -134,12 +186,32 @@ ALTER TABLE `companies`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `company_bonuses`
+--
+ALTER TABLE `company_bonuses`
+  ADD PRIMARY KEY (`company_id`),
+  ADD KEY `company_id` (`company_id`);
+
+--
+-- Indexes for table `company_dividends`
+--
+ALTER TABLE `company_dividends`
+  ADD PRIMARY KEY (`company_id`),
+  ADD KEY `company_id` (`company_id`);
+
+--
 -- Indexes for table `shares`
 --
 ALTER TABLE `shares`
   ADD PRIMARY KEY (`id`),
   ADD KEY `company_id` (`company_id`),
   ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `shortsold_shares`
+--
+ALTER TABLE `shortsold_shares`
+  ADD KEY `share_id` (`share_id`);
 
 --
 -- Indexes for table `teams`
@@ -162,10 +234,22 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `shares`
 --
 ALTER TABLE `shares`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `company_bonuses`
+--
+ALTER TABLE `company_bonuses`
+  ADD CONSTRAINT `company_id_foreign_key` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
+
+--
+-- Constraints for table `company_dividends`
+--
+ALTER TABLE `company_dividends`
+  ADD CONSTRAINT `dividend_foreign_key` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
 
 --
 -- Constraints for table `shares`
@@ -173,6 +257,12 @@ ALTER TABLE `shares`
 ALTER TABLE `shares`
   ADD CONSTRAINT `shares_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`),
   ADD CONSTRAINT `shares_ibfk_2` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`);
+
+--
+-- Constraints for table `shortsold_shares`
+--
+ALTER TABLE `shortsold_shares`
+  ADD CONSTRAINT `shortsellforeignkey` FOREIGN KEY (`share_id`) REFERENCES `shares` (`id`);
 
 --
 -- Constraints for table `transactions`
