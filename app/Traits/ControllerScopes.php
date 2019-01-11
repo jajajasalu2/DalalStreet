@@ -75,10 +75,10 @@ trait ControllerScopes {
         $sold = 0;
         foreach($transactions as $transaction) {
             if ($transaction->buy_sell == 1) {
-                $bought++;
+                $bought+=$transaction->amount;
             }
             else {
-                $sold++;
+                $sold+=$transaction->amount;
             }
         }
         if ($buy_or_sell == 1) {

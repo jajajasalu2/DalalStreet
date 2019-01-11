@@ -43,7 +43,7 @@ class TransactionController extends Controller
                                 $request->input('amount'));
         }
         if ($error_code) {
-            return back()->with('error',ControllerScopes::error($sell));
+            return back()->with('error',ControllerScopes::error($error_code));
         }
         $c = ControllerScopes::adjust_rate($request->input('amount'),
                     $request->input('company_id'),
