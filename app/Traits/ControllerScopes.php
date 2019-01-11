@@ -81,12 +81,11 @@ trait ControllerScopes {
                 $sold++;
             }
         }
-        if ($buy_or_sell) {
-            $g = $amount*$bought*mt_rand()/mt_getrandmax();
-            $company->rate += $g;
+        if ($buy_or_sell == 1) {
+            $company->rate = $amount*$bought*mt_rand()/mt_getrandmax();
             //$company->rate += $amount*$bought*mt_rand()/mt_getrandmax();
         }
-        else {
+        else if ($buy_or_sell == 2){
             $company->rate -= $amount*$sold*mt_rand()/mt_getrandmax();
         }
         $company->save();
