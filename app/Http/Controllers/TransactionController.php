@@ -45,10 +45,9 @@ class TransactionController extends Controller
         if ($error_code) {
             return back()->with('error',ControllerScopes::error($error_code));
         }
-        $c = ControllerScopes::adjust_rate($request->input('amount'),
+        $error_code = ControllerScopes::adjust_rate($request->input('amount'),
                     $request->input('company_id'),
                     $request->input('buy_sell'));
-
         $transaction->team_id = $request->input('team_id');
         $transaction->company_id = $request->input('company_id');
         $transaction->amount = $request->input('amount');
@@ -66,6 +65,7 @@ class TransactionController extends Controller
     public function session_end() {
         $company_dividends = CompanyDividend::all();
         $company_bonuses = CompanyBonus::all();
+        $shortsold_shares = ShortsoldShare::all();
         foreach($company_dividends as $company_dividend) {
             $shares = Share::where('company_id','=',$company_dividend->company_id)
                             ->get();
@@ -92,6 +92,9 @@ class TransactionController extends Controller
                 }
             }
         }
+        /*foreach ($shortsold_shares as $shortsold_share) {
+            
+        }*/
         return back()->with('success','Session Ended.');
     }
 }
