@@ -35,18 +35,20 @@ class CompanyController extends Controller
         $company->type = $request->input('type');
         $company->save();
         if ($request->input('dividend_exists')) {
-            $dividend = CompanyDividend::new();
+            $dividend = new CompanyDividend;
             $dividend->company_id = $request->input('company_id');
             $dividend->shares_per_dividend = $request->input('shares_per_dividend');
             $dividend->dividend = $request->input('dividend');
-            $dividend->save();
+            DB::insert("INSERT into company_dividends 
+            values($dividend->company_id,$dividend->shares_per_bonus,$dividend->bonus);");
         }
         if ($request->input('bonus_exists')) {
-            $bonus = CompanyBonus::new();
+            $bonus = new CompanyBonus;
             $bonus->company_id = $request->input('company_id');
             $bonus->shares_per_bonus = $request->input('shares_per_bonus');
             $bonus->bonus = $request->input('bonus');
-            $bonus->save();
+            DB::insert("INSERT into company_bonuses 
+            values($bonus->company_id,$bonus->shares_per_bonus,$bonus->bonus);");
         }
         return back()->with('success','Company/Forex created successfully');
     }
@@ -77,7 +79,7 @@ class CompanyController extends Controller
         if ($request->input('dividend_exists')) {
             $dividend = CompanyDividend::where('company_id','=',$request->input('company_id'));
             if (empty($dividend)) {
-                $dividend = CompanyDividend::new();
+                $dividend = new CompanyDividend;
                 $dividend->company_id = $request->input('company_id');
             }
             else {
@@ -92,7 +94,7 @@ class CompanyController extends Controller
         if ($request->input('bonus_exists')) {
             $bonus = CompanyBonus::where('company_id','=',$request->input('company_id'));
             if (empty($bonus)) {
-                $bonus = CompanyBonus::new();
+                $bonus = new CompanyBonus;
                 $bonus->company_id = $request->input('company_id');
             }
             else {
