@@ -19,7 +19,8 @@ trait ControllerScopes {
         if (empty($share)) {
             return 10;
         }
-        if ($amount == 0 || $share->amount == 0) {
+        $shortsold_share = ShortsoldShare::where('share_id','=',$share->id)->first();
+        if ($amount == 0 || $share->amount == 0 || $amount < 0) {
             return 12;
         }
         if ($share->amount < $amount) {
@@ -27,7 +28,7 @@ trait ControllerScopes {
         }
         else {
             $share->amount -= $amount;
-            if ($share->amount == 0) {
+            if ($share->amount == 0 && empty($shortsold_share)) {
                 $share->delete();
             }
             else {
@@ -47,6 +48,9 @@ trait ControllerScopes {
                             ->first();
         $company = Company::where('id','=',$company_id)->first();
         $team = Team::where('id','=',$team_id)->first();
+        if ($amount == 0 || $amount < 0) {
+            return 12;
+        }
         if ($company->no_of_shares < $amount) {
             return 14;
         }
@@ -104,7 +108,7 @@ trait ControllerScopes {
         if (!empty($shortsold_share)) {
             return 15;
         }
-        if ($amount == 0) {
+        if ($amount == 0 || $amount < 0) {
             return 12;
         }
         if ($share->amount < $amount) {
@@ -129,7 +133,7 @@ trait ControllerScopes {
         if (empty($shortsold_share)) {
             return 16;
         }
-        if ($amount == 0) {
+        if ($amount == 0 || $amount < 0) {
             return 12;
         }
         if ($amount > $shortsold_share->amount) {
@@ -137,7 +141,13 @@ trait ControllerScopes {
         }
         $company = Company::where('id','=',$share->company_id)->first();
         $team = Team::where('id','=',$team_id)->first();
-        $team->balance += ($shortsold_share->rate - $company->rate) * $amount;
+        $buy_back_factor = ($shortsold_share->rate - $company->rate) * $amount;
+        if ($buy_back_factor < 0 && $team->balance < $buy_back_factor) {
+            $team->balance -= 0.1 * $team->balance;
+        }
+        else {
+            $team->balance += $buy_back_factor;
+        }
         $shortsold_share->amount -= $amount;
         $share->amount += $amount;
         if ($shortsold_share->amount == 0) {

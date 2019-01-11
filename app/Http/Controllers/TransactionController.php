@@ -9,7 +9,9 @@ use App\CompanyBonus;
 use App\Team;
 use App\Share;
 use App\Transaction;
+use App\ShortsoldShare;
 use App\Traits\ControllerScopes;
+use DB;
 
 class TransactionController extends Controller
 {
@@ -20,8 +22,6 @@ class TransactionController extends Controller
             'amount'=>'required',
             'buy_sell'=>'required']);
         $transaction = new Transaction;
-        $company = Company::where('id','=',$request->input('company_id'))->get();
-        $team = Team::where('id','=',$request->input('team_id'))->get();
         if ($request->input('buy_sell') == 1) {
             $error_code = ControllerScopes::buy_share($request->input('team_id'),
                                 $request->input('company_id'),
@@ -92,9 +92,10 @@ class TransactionController extends Controller
                 }
             }
         }
-        /*foreach ($shortsold_shares as $shortsold_share) {
-            
-        }*/
+        foreach ($shortsold_shares as $shortsold_share) {
+            $share = Share::where('id','=',$shortsold_share->share_id)->first();
+            $error_code = ControllerScopes::buy_back($share->team_id,$share->company_id,$shortsold_share->amount);
+        }
         return back()->with('success','Session Ended.');
     }
 }

@@ -77,13 +77,11 @@ class CompanyController extends Controller
         $company->type = $request->input('type');
         $company->save();
         if ($request->input('dividend_exists')) {
-            $dividend = CompanyDividend::where('company_id','=',$request->input('company_id'));
+            $dividend = CompanyDividend::where('company_id','=',$request->input('company_id'))
+                                        ->first();
             if (empty($dividend)) {
                 $dividend = new CompanyDividend;
                 $dividend->company_id = $request->input('company_id');
-            }
-            else {
-                $dividend = $dividend->first();
             }
             $dividend->shares_per_dividend = $request->input('shares_per_dividend');
             $dividend->dividend = $request->input('dividend');
@@ -92,13 +90,11 @@ class CompanyController extends Controller
             ,dividend=$dividend->dividend WHERE company_id=$dividend->company_id;");
         }
         if ($request->input('bonus_exists')) {
-            $bonus = CompanyBonus::where('company_id','=',$request->input('company_id'));
+            $bonus = CompanyBonus::where('company_id','=',$request->input('company_id'))
+                                ->first();
             if (empty($bonus)) {
                 $bonus = new CompanyBonus;
                 $bonus->company_id = $request->input('company_id');
-            }
-            else {
-                $bonus = $bonus->first();
             }   
             $bonus->shares_per_bonus = $request->input('shares_per_bonus');
             $bonus->bonus = $request->input('bonus');
@@ -114,18 +110,19 @@ class CompanyController extends Controller
 
     public function delete(Request $request) {
         $company_id = $request->input('company_id');
-        $dividend = CompanyDividend::where('company_id','=',$request->input('company_id'));
+        $dividend = CompanyDividend::where('company_id','=',$request->input('company_id'))
+                                    ->first();
         //return empty($dividend);
-        $bonus = CompanyBonus::where('company_id','=',$request->input('company_id'));
-        $transactions = Transaction::where('company_id','=',$request->input('company_id'))->get();
+        $bonus = CompanyBonus::where('company_id','=',$request->input('company_id'))
+                            ->first();
+        $transactions = Transaction::where('company_id','=',$request->input('company_id'))
+                                    ->get();
         $company = Company::where('id','=',$request->input('company_id'))->first();
-        if ($dividend->first()) {
-            $dividend = $dividend->first();
+        if ($dividend) {
             DB::delete("delete from company_dividends 
             where company_id=$dividend->company_id;");
         }
-        if ($bonus->first()) {
-            $bonus = $bonus->first();
+        if ($bonus) {
             DB::delete("delete from company_bonuses
             where company_id=$bonus->company_id;");
         }
