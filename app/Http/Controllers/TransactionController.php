@@ -11,6 +11,7 @@ use App\Share;
 use App\Transaction;
 use App\ShortsoldShare;
 use App\Traits\ControllerScopes;
+use App\Session;
 use DB;
 
 class TransactionController extends Controller
@@ -37,7 +38,7 @@ class TransactionController extends Controller
                                 $request->input('company_id'),
                                 $request->input('amount'));
         }
-        else {
+        else if ($request->input('buy_sell') == 4){
             $error_code = ControllerScopes::short_sell($request->input('team_id'),
                                 $request->input('company_id'),
                                 $request->input('amount'));
@@ -52,6 +53,12 @@ class TransactionController extends Controller
         $transaction->company_id = $request->input('company_id');
         $transaction->amount = $request->input('amount');
         $transaction->buy_sell = $request->input('buy_sell');
+        $session = Session::orderBy('time','desc')->first();
+        if (empty($session)) {
+            $session = new Session;
+            $session->save();
+        }
+        $transaction->session_id = $session->id;
         $transaction->save();
         return back()->with('success','Transaction completed successfully');
     }
@@ -68,34 +75,38 @@ class TransactionController extends Controller
         $shortsold_shares = ShortsoldShare::all();
         foreach($company_dividends as $company_dividend) {
             $shares = Share::where('company_id','=',$company_dividend->company_id)
+                            ->where('amount','>=',$company_dividend->shares_per_dividend)
                             ->get();
+            $no_of_shares = count($shares);
             foreach($shares as $share) {
-                if ($share->amount >= $company_dividend->shares_per_dividend) {
-                    $team = Team::where('id','=',$share->team_id)
-                        ->first();
-                    $dividend_factor = intval($share->amount/$company_dividend->shares_per_dividend);
-                    $team->balance += $company_dividend->dividend * $dividend_factor;
-                    $team->save();
-                }
+                $team = Team::where('id','=',$share->team_id)
+                            ->first();
+                $dividend_factor = intval($share->amount/$company_dividend->shares_per_dividend);
+                $team->balance += ($company_dividend->dividend/$no_of_shares) * $dividend_factor;
+                $team->save();
             }
+            DB::delete("DELETE FROM company_dividends 
+            WHERE company_id=$company_dividend->company_id;");
         }
+
         foreach($company_bonuses as $company_bonus) {
             $shares = Share::where('company_id','=',$company_bonus->company_id)
+                            ->where('amount','>=',$company_bonus->bonus)
                             ->get();
             foreach ($shares as $share) {
-                if ($share->amount >= $company_bonus->shares_per_dividend) {
-                    $team = Team::where('id','=',$share->team_id)
-                        ->first();
-                    $bonus_factor = intval($share->amount/$company_bonus->shares_per_bonus);
-                    $team->balance += $company_bonus->bonus * $bonus_factor;
-                    $team->save();
-                }
+                $team = Team::where('id','=',$share->team_id)
+                    ->first();
+                $bonus_factor = intval($share->amount/$company_bonus->shares_per_bonus);
+                $team->balance += $company_bonus->bonus * $bonus_factor;
+                $team->save();
             }
         }
         foreach ($shortsold_shares as $shortsold_share) {
             $share = Share::where('id','=',$shortsold_share->share_id)->first();
             $error_code = ControllerScopes::buy_back($share->team_id,$share->company_id,$shortsold_share->amount);
         }
+        $session = new Session;
+        $session->save();
         return back()->with('success','Session Ended.');
     }
 }

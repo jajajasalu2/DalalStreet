@@ -55,7 +55,12 @@ class CompanyController extends Controller
     
     public function edit($company_id) {
         $company = Company::where('id','=',$company_id)->first();
-        return view('edit_company')->with('company',$company);
+        $company_dividend = CompanyDividend::where('company_id','=',$company->id)->first();
+        $company_bonus = CompanyBonus::where('company_id','=',$company->id)->first();
+
+        return view('edit_company')->with('company',$company)
+                                    ->with('company_dividend',$company_dividend)
+                                    ->with('company_bonus',$company_bonus);
     }
 
     public function update(Request $request) {
@@ -82,6 +87,8 @@ class CompanyController extends Controller
             if (empty($dividend)) {
                 $dividend = new CompanyDividend;
                 $dividend->company_id = $request->input('company_id');
+                DB::insert("INSERT INTO company_dividends
+                values($dividend->company_id,0,0);");
             }
             $dividend->shares_per_dividend = $request->input('shares_per_dividend');
             $dividend->dividend = $request->input('dividend');
@@ -95,6 +102,8 @@ class CompanyController extends Controller
             if (empty($bonus)) {
                 $bonus = new CompanyBonus;
                 $bonus->company_id = $request->input('company_id');
+                DB::insert("INSERT INTO company_bonuses
+                values($bonus->company_id,0,0);");
             }   
             $bonus->shares_per_bonus = $request->input('shares_per_bonus');
             $bonus->bonus = $request->input('bonus');
