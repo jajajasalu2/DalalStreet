@@ -38,3 +38,7 @@ Route::post('/store/company','CompanyController@store');
 Route::post('/update/company','CompanyController@update');  
 
 Route::get('/admin','AdminController@dashboard');
+
+Route::get('/team/{id}','TeamController@profile');
+
+Route::get('/company/{id}','CompanyController@show');

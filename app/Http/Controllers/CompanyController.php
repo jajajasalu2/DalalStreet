@@ -52,6 +52,14 @@ class CompanyController extends Controller
         }
         return back()->with('success','Company/Forex created successfully');
     }
+
+    public function show($company_id) {
+        $company = Company::where('id','=',$company_id)->first();
+        if (empty($company)) {
+            return back()->with('error','Company does not exist');
+        }
+        return view('company_profile')->with('company',$company);
+    }
     
     public function edit($company_id) {
         $company = Company::where('id','=',$company_id)->first();
