@@ -73,6 +73,7 @@ class TransactionController extends Controller
         $company_dividends = CompanyDividend::all();
         $company_bonuses = CompanyBonus::all();
         $shortsold_shares = ShortsoldShare::all();
+        
         foreach($company_dividends as $company_dividend) {
             $shares = Share::where('company_id','=',$company_dividend->company_id)
                             ->where('amount','>=',$company_dividend->shares_per_dividend)
@@ -82,7 +83,7 @@ class TransactionController extends Controller
                 $team = Team::where('id','=',$share->team_id)
                             ->first();
                 $dividend_factor = intval($share->amount/$company_dividend->shares_per_dividend);
-                $team->balance += ($company_dividend->dividend/$no_of_shares) * $dividend_factor;
+                $team->balance += ($company_dividend->dividend/$no_of_shares) * $dividend_factor; // company dividiend->dividend = profit
                 $team->save();
             }
             DB::delete("DELETE FROM company_dividends 
@@ -101,6 +102,7 @@ class TransactionController extends Controller
                 $team->save();
             }
         }
+
         foreach ($shortsold_shares as $shortsold_share) {
             $share = Share::where('id','=',$shortsold_share->share_id)->first();
             $error_code = ControllerScopes::buy_back($share->team_id,$share->company_id,$shortsold_share->amount);

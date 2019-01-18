@@ -77,21 +77,42 @@ trait ControllerScopes {
     public static function adjust_rate($amount,$company_id,$buy_or_sell) {
         $company = Company::where('id','=',$company_id)->first();
         $transactions = Transaction::where('company_id','=',$company_id)->get();
-        $bought = 0;
-        $sold = 0;
+        //$bought = 0;
+ /*       $sold = 0;
         foreach($transactions as $transaction) {
             if ($transaction->buy_sell == 1) {
                 $bought+=$transaction->amount;
             }
-            else {
+            else if ($transaction->buy_sell == 2) {
                 $sold+=$transaction->amount;
             }
-        }
+	}*/
+        if ($amount <= 100)
+            {
+                $changeRate = 0.75; // 1 to 2 
+            }
+            else if ($amount <= 500)
+            {
+                $changeRate = 1;  // 2 to 5
+            }
+            else if ($amount <= 1000)
+            {
+                $changeRate = 1.5; // 5 to 10
+            }
+            else
+            {
+                $changeRate = 2; // 10 to 20
+            }
+
         if ($buy_or_sell == 1) {
-            $company->rate += $bought*mt_rand()/mt_getrandmax();
+            //$company->rate += $bought*mt_rand()/mt_getrandmax();
+	$company->rate = $company->rate *( 1+ (mt_rand()/mt_getrandmax())/100);
+		//$company->rate = $company->rate * (1+$changeRate / 100);
         }
         else if ($buy_or_sell == 2) {
-            $company->rate -= $sold*mt_rand()/mt_getrandmax();
+
+		$company->rate = $company->rate * (1-$changeRate / 100);
+            //$company->rate -= $sold*mt_rand()/mt_getrandmax();
         }
         $company->save();
         return 0;
