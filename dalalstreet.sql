@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 13, 2019 at 12:56 PM
+-- Generation Time: Jan 20, 2019 at 12:28 AM
 -- Server version: 5.7.24-0ubuntu0.16.04.1
 -- PHP Version: 7.2.13-1+ubuntu16.04.1+deb.sury.org+1
 
@@ -42,7 +42,7 @@ CREATE TABLE `companies` (
 --
 
 INSERT INTO `companies` (`id`, `name`, `value`, `no_of_shares`, `rate`, `updated_at`, `type`, `created_at`) VALUES
-(1, 'IBM', 10000, 99850, 566.738, '2019-01-13 01:54:07', 'COMPANY', '2019-01-09 22:08:00');
+(1, 'IBM', 10000, 99848, 103.012, '2019-01-19 12:43:36', 'COMPANY', '2019-01-09 22:08:00');
 
 -- --------------------------------------------------------
 
@@ -65,7 +65,8 @@ CREATE TABLE `company_bonuses` (
 CREATE TABLE `company_dividends` (
   `company_id` int(11) NOT NULL,
   `dividend` float NOT NULL,
-  `shares_per_dividend` int(11) NOT NULL
+  `shares_per_dividend` int(11) NOT NULL,
+  `profit_or_loss` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -107,7 +108,7 @@ CREATE TABLE `shares` (
 --
 
 INSERT INTO `shares` (`amount`, `company_id`, `team_id`, `updated_at`, `created_at`, `id`) VALUES
-(6, 1, 1, '2019-01-13', '2019-01-13', 13);
+(8, 1, 1, '2019-01-19', '2019-01-13', 13);
 
 -- --------------------------------------------------------
 
@@ -140,7 +141,7 @@ CREATE TABLE `teams` (
 --
 
 INSERT INTO `teams` (`id`, `balance`, `updated_at`) VALUES
-(1, 12236.2, '2019-01-13 01:54:07'),
+(1, 13921.8, '2019-01-19 12:43:36'),
 (2, 3663.69, '2019-01-13 01:34:20');
 
 -- --------------------------------------------------------
@@ -166,7 +167,13 @@ CREATE TABLE `transactions` (
 INSERT INTO `transactions` (`amount`, `buy_sell`, `company_id`, `team_id`, `updated_at`, `created_at`, `session_id`) VALUES
 (1, 1, 1, 1, '2019-01-13 01:53:42', '2019-01-13 01:53:42', 1),
 (2, 1, 1, 1, '2019-01-13 01:53:54', '2019-01-13 01:53:54', 1),
-(1, 1, 1, 1, '2019-01-13 01:54:07', '2019-01-13 01:54:07', 2);
+(1, 1, 1, 1, '2019-01-13 01:54:07', '2019-01-13 01:54:07', 2),
+(1, 1, 1, 1, '2019-01-16 11:50:24', '2019-01-16 11:50:24', 2),
+(5, 2, 1, 1, '2019-01-16 12:02:16', '2019-01-16 12:02:16', 2),
+(1, 1, 1, 1, '2019-01-19 12:43:05', '2019-01-19 12:43:05', 2),
+(10, 1, 1, 1, '2019-01-19 12:43:18', '2019-01-19 12:43:18', 2),
+(5, 1, 1, 1, '2019-01-19 12:43:28', '2019-01-19 12:43:28', 2),
+(10, 2, 1, 1, '2019-01-19 12:43:36', '2019-01-19 12:43:36', 2);
 
 --
 -- Indexes for dumped tables

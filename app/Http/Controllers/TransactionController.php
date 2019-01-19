@@ -75,19 +75,21 @@ class TransactionController extends Controller
         $shortsold_shares = ShortsoldShare::all();
         
         foreach($company_dividends as $company_dividend) {
-            $shares = Share::where('company_id','=',$company_dividend->company_id)
-                            ->where('amount','>=',$company_dividend->shares_per_dividend)
-                            ->get();
-            $no_of_shares = count($shares);
-            foreach($shares as $share) {
-                $team = Team::where('id','=',$share->team_id)
-                            ->first();
-                $dividend_factor = intval($share->amount/$company_dividend->shares_per_dividend);
-                $team->balance += ($company_dividend->dividend/$no_of_shares) * $dividend_factor; // company dividiend->dividend = profit
-                $team->save();
+            if ($company_dividend->profit_or_loss) {
+                $shares = Share::where('company_id','=',$company_dividend->company_id)
+                                ->where('amount','>=',$company_dividend->shares_per_dividend)
+                                ->get();
+                $no_of_shares = count($shares);
+                foreach($shares as $share) {
+                    $team = Team::where('id','=',$share->team_id)
+                                ->first();
+                    $dividend_factor = intval($share->amount/$company_dividend->shares_per_dividend);
+                    $team->balance += ($company_dividend->dividend/$no_of_shares) * $dividend_factor; // company dividiend->dividend = profit
+                    $team->save();
+                }
+                DB::delete("DELETE FROM company_dividends 
+                WHERE company_id=$company_dividend->company_id;");
             }
-            DB::delete("DELETE FROM company_dividends 
-            WHERE company_id=$company_dividend->company_id;");
         }
 
         foreach($company_bonuses as $company_bonus) {

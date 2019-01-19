@@ -18,6 +18,12 @@
                 
                 <br/>Type: {{Form::text('type',$company->type,['class'=>'form_control'])}}
                 
+                <br/>Profit/loss:
+
+                <select name="profit_or_loss">
+                    <option value=1>Profit</option>
+                    <option value=0>Loss</option>
+                </select>
                 @if ($company_dividend)
                 <br/>Dividend Exists: {{Form::number('dividend_exists',1,['class'=>'form_control'])}}
                 <br/>Dividend: {{Form::number('dividend',$company_dividend->dividend,['class'=>'form_control'])}}
