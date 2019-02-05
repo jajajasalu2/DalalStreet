@@ -41,7 +41,7 @@ class CompanyController extends Controller
             $dividend->dividend = $request->input('dividend');
             $dividend->profit_or_loss = $request->input('profit_or_loss');
             DB::insert("INSERT into company_dividends 
-            values($dividend->company_id,$dividend->shares_per_bonus,$dividend->bonus,$dividend->profit_or_loss);");
+            values($dividend->company_id,$dividend->shares_per_dividend,$dividend->dividend,$dividend->profit_or_loss);");
         }
         if ($request->input('bonus_exists')) {
             $bonus = new CompanyBonus;
@@ -96,8 +96,11 @@ class CompanyController extends Controller
             if (empty($dividend)) {
                 $dividend = new CompanyDividend;
                 $dividend->company_id = $request->input('company_id');
+		$dividend->shares_per_dividend = $request->input('shares_per_dividend');
+		$dividend->dividend = $request->input('dividend');
+		$dividend->profit_or_loss = $request->input('profit_or_loss');
                 DB::insert("INSERT INTO company_dividends
-                values($dividend->company_id,0,0);");
+                values($dividend->company_id,$dividend->dividend,$dividend->shares_per_dividend,$dividend->profit_or_loss);");
             }
             $dividend->shares_per_dividend = $request->input('shares_per_dividend');
             $dividend->dividend = $request->input('dividend');

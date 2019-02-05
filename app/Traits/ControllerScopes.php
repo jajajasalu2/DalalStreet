@@ -103,7 +103,7 @@ trait ControllerScopes {
             $share->amount += $amount;
         }
         $share->save();
-        $team->balance -= 0.98 * $company->rate * $amount;
+        $team->balance -= $company->rate * $amount;
         $team->save();
         $company->no_of_shares -= $amount;
         $company->save();

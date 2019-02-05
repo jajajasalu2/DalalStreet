@@ -79,7 +79,10 @@ class TransactionController extends Controller
                 $shares = Share::where('company_id','=',$company_dividend->company_id)
                                 ->where('amount','>=',$company_dividend->shares_per_dividend)
                                 ->get();
-                $no_of_shares = count($shares);
+		$no_of_shares = 0;
+		foreach ($shares as $share) {
+			$no_of_shares += $share->amount;
+		}
                 foreach($shares as $share) {
                     $team = Team::where('id','=',$share->team_id)
                                 ->first();
