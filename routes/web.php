@@ -42,3 +42,6 @@ Route::get('/admin','AdminController@dashboard');
 Route::get('/team/{id}','TeamController@profile');
 
 Route::get('/company/{id}','CompanyController@show');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

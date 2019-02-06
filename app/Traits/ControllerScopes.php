@@ -34,6 +34,9 @@ trait ControllerScopes {
                             ->first();
         $company = Company::where('id','=',$company_id)->first();
         $team = Team::where('id','=',$team_id)->first();
+	if ($amount > 2000) {
+		return 20;
+	}
         if (empty($share)) {
             return 10;
         }
@@ -84,6 +87,9 @@ trait ControllerScopes {
                             ->first();
         $company = Company::where('id','=',$company_id)->first();
         $team = Team::where('id','=',$team_id)->first();
+	if ($amount > 2000) {
+		return 20;
+	}
         if ($amount == 0 || $amount < 0) {
             return 12;
         }
@@ -189,25 +195,27 @@ trait ControllerScopes {
     *            ControllerScopes::short_sell(1,1,1);
     */
     public static function short_sell($team_id,$company_id,$amount) {
-        $share = Share::where('team_id','=',$team_id)
-                        ->where('company_id','=',$company_id)
-                        ->first();
-        if (empty($share)) {
-            return 10;
-        }
-        $shortsold_share = ShortsoldShare::where('share_id','=',$share->id)->first();
+        //$share = Share::where('team_id','=',$team_id)
+        //                ->where('company_id','=',$company_id)
+        //                ->first();
+        //if (empty($share)) {
+        //    return 10;
+        //}
+    	$shortsold_share = ShortsoldShare::where('team_id','=',$team_id)
+		    				->where('company_id','=',$company_id)
+						->first();
         if (!empty($shortsold_share)) {
             return 15;
         }
         if ($amount == 0 || $amount < 0) {
             return 12;
         }
-        if ($share->amount < $amount) {
-            return 11;
-        }
+        //if ($share->amount < $amount) {
+        //    return 11;
+        //}
         $company = Company::where('id','=',$share->company_id)->first();
-        DB::insert("INSERT INTO shortsold_shares (share_id,amount,rate) 
-        values($share->id,$amount,$company->rate);");
+        DB::insert("INSERT INTO shortsold_shares (team_id,company_id,amount,rate) 
+        values($team_id,$company_id,$amount,$company->rate);");
         $share->amount -= $amount;
         $share->save();
         return 0;
@@ -236,13 +244,15 @@ trait ControllerScopes {
     *            ControllerScopes::buy_back(1,1,1);
     */
     public static function buy_back($team_id,$company_id,$amount) {
-        $share = Share::where('team_id','=',$team_id)
-                        ->where('company_id','=',$company_id)
-                        ->first();
-        if (empty($share)) {
-            return 10;
-        }
-        $shortsold_share = ShortsoldShare::where('share_id','=',$share->id)->first();
+        //$share = Share::where('team_id','=',$team_id)
+        //                ->where('company_id','=',$company_id)
+        //                ->first();
+        //if (empty($share)) {
+        //    return 10;
+        //}
+	    $shortsold_share = ShortsoldShare::where('team_id','=',$team_id)
+		    ->where('company_id','=',$company_id)
+		    ->first();
         if (empty($shortsold_share)) {
             return 16;
         }
@@ -265,14 +275,16 @@ trait ControllerScopes {
         $share->amount += $amount;
         if ($shortsold_share->amount == 0) {
             DB::delete("DELETE FROM shortsold_shares 
-            WHERE share_id = $share->id;");
+	    WHERE team_id = $team_id
+		and company_id=$company_id;");
         }
         else {
             DB::statement("UPDATE shortsold_shares
             SET amount=$shortsold_share->amount
-            WHERE share_id=$share->id;");
+	    WHERE team_id=$team_id
+		and company_id=$company_id;");
         }
-        $share->save();
+	//        $share->save();
         $team->save();
         return 0;
     }
@@ -310,7 +322,8 @@ trait ControllerScopes {
             14 => 'This company does not have enough shares',
             15 => 'You have already short sold shares of this company',
             16 => 'You haven\'t short sold shares of this company',
-            17 => 'You haven\'t short sold enough shares of this company'
+	    17 => 'You haven\'t short sold enough shares of this company',
+	    20 => 'You can\'t buy more than 2000 shares at a time'
         ];
         return $errors[$error_code];
     }

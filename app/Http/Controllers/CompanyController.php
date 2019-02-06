@@ -21,8 +21,8 @@ class CompanyController extends Controller
         $this->validate($request,[
             'name'=>'required',
             'rate'=>'required',
-            'value'=>'required',
-            'no_of_shares'=>'required',
+  //          'value'=>'required',
+   //         'no_of_shares'=>'required',
             'type'=>'required',
             'bonus_exists'=>'required',
             'dividend_exists'=>'required'
@@ -30,8 +30,8 @@ class CompanyController extends Controller
         $company = new Company;
         $company->name = $request->input('name');
         $company->rate = $request->input('rate');
-        $company->value = $request->input('value');
-        $company->no_of_shares = $request->input('no_of_shares');
+//        $company->value = $request->input('value');
+//        $company->no_of_shares = $request->input('no_of_shares');
         $company->type = $request->input('type');
         $company->save();
         if ($request->input('dividend_exists')) {
@@ -77,8 +77,8 @@ class CompanyController extends Controller
             'company_id'=>'required',
             'name'=>'required',
             'rate'=>'required',
-            'value'=>'required',
-            'no_of_shares'=>'required',
+    //        'value'=>'required',
+    //        'no_of_shares'=>'required',
             'type'=>'required',
             'bonus_exists'=>'required',
             'dividend_exists'=>'required'
@@ -86,8 +86,8 @@ class CompanyController extends Controller
         $company = Company::where('id','=',$request->input('company_id'))->first();
         $company->name = $request->input('name');
         $company->rate = $request->input('rate');
-        $company->value = $request->input('value');
-        $company->no_of_shares = $request->input('no_of_shares');
+   //     $company->value = $request->input('value');
+   //     $company->no_of_shares = $request->input('no_of_shares');
         $company->type = $request->input('type');
         $company->save();
         if ($request->input('dividend_exists')) {

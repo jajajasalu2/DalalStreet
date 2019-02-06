@@ -10,11 +10,9 @@
                 {{Form::hidden('company_id',$company->id)}}
                 <br/>Name: {{Form::text('name',$company->name,['class'=>'form_control'])}}
                 
-                <br/>Value: {{Form::number('value',$company->value,['step'=>0.01,'class'=>'form_control'])}}
                 
                 <br/>Rate: {{Form::number('rate',$company->rate,['step'=>0.01,'class'=>'form_control'])}}
                 
-                <br/>No. of shares: {{Form::number('no_of_shares',$company->no_of_shares,['class'=>'form_control','placeholder'=>'Amount'])}}
                 
                 <br/>Type: {{Form::text('type',$company->type,['class'=>'form_control'])}}
                 

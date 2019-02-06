@@ -8,10 +8,8 @@
                 <div class="card-body">
                 {!!Form::open(['action'=>'CompanyController@store','method'=>'POST','enctype'=>'multipart/form-data'])!!}
                 <br/>Name: {{Form::text('name','',['class'=>'form_control'])}}
-                <br/>Value: {{Form::number('value',0,['step'=>0.01,'class'=>'form_control'])}}
                 
                 <br/>Rate: {{Form::number('rate',0,['step'=>0.01,'class'=>'form_control'])}}
-                <br/>No. of shares: {{Form::number('no_of_shares',0,['class'=>'form_control','placeholder'=>'Amount'])}}
                 
                 <br/>Type: {{Form::text('type','COMPANY',['class'=>'form_control'])}}
                 <br/>Dividend Exists: {{Form::number('dividend_exists',0,['class'=>'form_control'])}}

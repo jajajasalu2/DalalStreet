@@ -1,0 +1,1 @@
+update user set Create_tablespace_priv='Y' where User='phpmyadmin';
