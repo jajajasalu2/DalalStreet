@@ -86,7 +86,7 @@ class TransactionController extends Controller
 			else if ($transaction->amount <= 500) {
 			   $changeRate = ControllerScopes::random_in_range(2,5);  // 2 to 5
 			}
-			else if ($transcation->amount <= 1000) {
+			else if ($transaction->amount <= 1000) {
 			    $changeRate = ControllerScopes::random_in_range(5,10); // 5 to 10
 			}
 			else {

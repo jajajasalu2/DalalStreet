@@ -24,7 +24,7 @@
             @elseif($transaction->buy_sell == 3)
             BOUGHT BACK {{$transaction->amount}}
             @else
-            SHORT SOLD {$transaction->amount}}
+            SHORT SOLD {{$transaction->amount}}
             @endif
             </h5>
             </div>
