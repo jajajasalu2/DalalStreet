@@ -46,9 +46,9 @@ class TransactionController extends Controller
         if ($error_code) {
             return back()->with('error',ControllerScopes::error($error_code));
         }
-        $error_code = ControllerScopes::adjust_rate($request->input('amount'),
-                    $request->input('company_id'),
-                    $request->input('buy_sell'));
+        //$error_code = ControllerScopes::adjust_rate($request->input('amount'),
+        //            $request->input('company_id'),
+        //            $request->input('buy_sell'));
         $transaction->team_id = $request->input('team_id');
         $transaction->company_id = $request->input('company_id');
         $transaction->amount = $request->input('amount');
@@ -72,9 +72,36 @@ class TransactionController extends Controller
     public function session_end() {
         $company_dividends = CompanyDividend::all();
         $company_bonuses = CompanyBonus::all();
-        $shortsold_shares = ShortsoldShare::all();
-        
-        foreach($company_dividends as $company_dividend) {
+	$companies = Company::all();
+	$shortsold_shares = ShortsoldShare::all();
+        $session = Session::orderBy('time','desc')->first()->id;
+	foreach ($companies as $company) {
+		$transactions = Transaction::where('session_id','=',$session)
+					->where('company_id','=',$company->id)
+					->get();
+		foreach ($transactions as $transaction) {
+			if ($transaction->amount <= 100) {
+				$changeRate = ControllerScopes::random_in_range(1,2); // 1 to 2 
+			}
+			else if ($transaction->amount <= 500) {
+			   $changeRate = ControllerScopes::random_in_range(2,5);  // 2 to 5
+			}
+			else if ($transcation->amount <= 1000) {
+			    $changeRate = ControllerScopes::random_in_range(5,10); // 5 to 10
+			}
+			else {
+			    $changeRate = ControllerScopes::random_in_range(10,20); // 10 to 20
+			}
+			if ($transaction->buy_sell == 1) {
+			    $company->rate = $company->rate *(1+$changeRate/100);
+			}
+			else if ($transaction->buy_sell == 2) {
+			    $company->rate = $company->rate * (1-$changeRate/100);
+			}	
+		}
+		$company->save();
+	}
+	foreach($company_dividends as $company_dividend) {
             if ($company_dividend->profit_or_loss) {
                 $shares = Share::where('company_id','=',$company_dividend->company_id)
                                 ->where('amount','>=',$company_dividend->shares_per_dividend)
