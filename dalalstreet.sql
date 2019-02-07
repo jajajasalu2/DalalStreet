@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 06, 2019 at 10:41 PM
+-- Generation Time: Feb 07, 2019 at 11:08 AM
 -- Server version: 5.7.25-0ubuntu0.18.04.2
 -- PHP Version: 7.2.14-1+ubuntu18.04.1+deb.sury.org+1
 
@@ -34,6 +34,13 @@ CREATE TABLE `companies` (
   `type` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `companies`
+--
+
+INSERT INTO `companies` (`id`, `name`, `rate`, `updated_at`, `type`, `created_at`) VALUES
+(1, 'company', 10000, '2019-02-07 00:08:06', 'COMPANY', '2019-02-07 00:08:06');
 
 -- --------------------------------------------------------
 
@@ -129,7 +136,8 @@ CREATE TABLE `shortsold_shares` (
   `company_id` int(11) NOT NULL,
   `amount` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `rate` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -143,6 +151,14 @@ CREATE TABLE `teams` (
   `balance` float DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `teams`
+--
+
+INSERT INTO `teams` (`id`, `balance`, `updated_at`) VALUES
+(1, 100000000, NULL),
+(2, 10000000000, NULL);
 
 -- --------------------------------------------------------
 
@@ -178,6 +194,16 @@ CREATE TABLE `users` (
   `role` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `role`) VALUES
+(1, 'jaskaran', 'abcd@gmail.com', NULL, '$2y$10$lshOlcaD4ouWangWsFilMeRecGfg/fOZcvcHfKA9/r.dHK2pQzQYa', 'i5pHJdrdbwxufF997X0wGCqkJKAN9XEykB6QThma83Out0vO06jOrmcuqSyT', '2019-02-06 22:57:02', '2019-02-06 22:57:02', NULL),
+(2, 'jaskaran', 'qwewe@gmail.com', NULL, '$2y$10$n2QeaRhYAjmB6i.0AgFd6OlcF.t.lKI0iJDSCxqOPz/dJRr6/1mRO', 'SKswQCJyoWtlG4lo5bo8XYTl7nsyzqzHoZs5L02TuA1ktiOJf39jikenl7FF', '2019-02-06 22:59:34', '2019-02-06 22:59:34', 3),
+(3, 'jansher', '123@gmail.com', NULL, '$2y$10$yyJpT5Zy3UOmoESj8j.9DOyBKMgKJ0X2hg64/45S3MaSv/qQ53C8m', 'W95cUV1yvG1lz9nshQRjuXaSz61BjGfNFxJOqSf9zK5RGBfUhAw0a0WcwxhJ', '2019-02-06 23:35:47', '2019-02-06 23:35:47', 3),
+(4, 'admin', 'admin@gmail.com', NULL, '$2y$10$4Cu0LISbn7oEkVXPGaFf5ubuvtNcy6D.koDpibu6s3Un5NhLUirva', NULL, '2019-02-07 00:07:31', '2019-02-07 00:07:31', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -188,6 +214,14 @@ CREATE TABLE `user_teams` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `team_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user_teams`
+--
+
+INSERT INTO `user_teams` (`user_id`, `team_id`) VALUES
+(2, 1),
+(3, 2);
 
 --
 -- Indexes for dumped tables
@@ -293,17 +327,17 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `shares`
 --
 ALTER TABLE `shares`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Constraints for dumped tables
 --

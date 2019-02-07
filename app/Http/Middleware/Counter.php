@@ -3,8 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\User;
-use \DB;
+use Auth;
 
 class Counter
 {
@@ -24,26 +23,8 @@ class Counter
             return redirect()->guest('login');
         }
 	} 
-	    else if (Auth::guard($guard)->user()->role==3) {
-    			
-	    }
-        return $next($request);
+    else if (Auth::guard($guard)->user()->role == 3)
+        return redirect()->to('/')->withError('For transactions please proceed to a counter');
     }
-}
-<?php
-
-namespace App\Http\Middleware;
-
-use Auth;
-use Closure;
-
-class Admin  
-{
-  public function handle($request, Closure $next, $guard = null)
-  {
-    else if (Auth::guard($guard)->user()->role = 1) {
-        return redirect()->to('/')->withError('Permission Denied');
-    }
-    return $next($request);
-  }
+	return $next($request);
 }

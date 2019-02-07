@@ -6,6 +6,7 @@ use App\Company;
 use App\Team;
 use App\Transaction;
 use App\ShortsoldShare;
+use Auth;
 use DB;
 
 trait ControllerScopes {
@@ -93,9 +94,9 @@ trait ControllerScopes {
         if ($amount == 0 || $amount < 0) {
             return 12;
         }
-        if ($company->no_of_shares < $amount) {
-            return 14;
-        }
+        //if ($company->no_of_shares < $amount) {
+        //    return 14;
+        //}
         if ($team->balance < ($company->rate * $amount)) {
             return 13;
         }
@@ -166,7 +167,7 @@ trait ControllerScopes {
 
         if ($buy_or_sell == 1) {
             //$company->rate += $bought*mt_rand()/mt_getrandmax();
-	        $company->rate = $company->rate *(1+$changeRate/100);
+		$company->rate = $company->rate *(1+$changeRate/100);
 		    //$company->rate = $company->rate * (1+$changeRate / 100);
         }
         else if ($buy_or_sell == 2) {
@@ -204,6 +205,9 @@ trait ControllerScopes {
     	$shortsold_share = ShortsoldShare::where('team_id','=',$team_id)
 		    				->where('company_id','=',$company_id)
 						->first();
+	if ($amount > 2000) {
+		return 20;
+	}
         if (!empty($shortsold_share)) {
             return 15;
         }
@@ -313,6 +317,20 @@ trait ControllerScopes {
         return 0;
     }
 
+    public static function security_check($team_id) {
+    	$user = Auth::user();
+	if ($user->role == 1 || $user->role == 2) return 0;
+	else if ($user->role == 3) {
+		$user_team_id = DB::table('user_teams')
+			->select('user_id')
+			->where('team_id','=',$team_id)
+			->first()
+			->user_id;
+		if ($user_team_id != $user->id) return 21;
+	}
+	return 0;
+    }
+
     public static function error($error_code) {
         $errors = [
             10 => 'You don\'t have a share in this company',
@@ -323,7 +341,8 @@ trait ControllerScopes {
             15 => 'You have already short sold shares of this company',
             16 => 'You haven\'t short sold shares of this company',
 	    17 => 'You haven\'t short sold enough shares of this company',
-	    20 => 'You can\'t buy more than 2000 shares at a time'
+	    20 => 'You can\'t buy more than 2000 shares at a time',
+	    21 => 'Permission Denied'
         ];
         return $errors[$error_code];
     }

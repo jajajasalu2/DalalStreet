@@ -16,7 +16,7 @@ class Admin
             return redirect()->guest('login');
         }
 	} 
-    else if (Auth::guard($guard)->user()->role = 1) {
+    else if (Auth::guard($guard)->user()->role != 1) {
         return redirect()->to('/')->withError('Permission Denied');
     }
     return $next($request);

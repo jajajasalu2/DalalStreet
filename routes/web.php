@@ -23,25 +23,26 @@ Route::get('/', function () {
 
 Route::post('/create','TransactionController@create');
 
-Route::get('/flush','TransactionController@session_end');
+Route::get('/flush',['middleware'=>['auth','admin'],'uses'=>'TransactionController@session_end']);
 
 Route::get('/transactions/{id}','TransactionController@show');
 
-Route::post('/delete/company','CompanyController@delete');
+Route::post('/delete/company',['middleware'=>['auth','admin'],'uses'=>'CompanyController@delete']);
 
-Route::get('/edit/company/{id}','CompanyController@edit');
+Route::get('/edit/company/{id}',['middleware'=>['auth','admin'],'uses'=>'CompanyController@edit']);
 
-Route::get('/create/company','CompanyController@create');
+Route::get('/create/company',['middleware'=>['auth','admin'],'uses'=>'CompanyController@create']);
 
 Route::post('/store/company','CompanyController@store');
 
 Route::post('/update/company','CompanyController@update');  
 
-Route::get('/admin','AdminController@dashboard');
+Route::get('/admin',['middleware'=>['auth','admin'],'uses'=>'AdminController@dashboard']);
 
 Route::get('/team/{id}','TeamController@profile');
 
 Route::get('/company/{id}','CompanyController@show');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

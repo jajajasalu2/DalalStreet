@@ -64,6 +64,8 @@ class TransactionController extends Controller
     }
 
     public function show($team_id) {
+	$error_code = ControllerScopes::security_check($team_id);	
+	if ($error_code) return back()->with('error',ControllerScopes::error($error_code));
         $transactions = Transaction::where('team_id','=',$team_id)->get();
         return view('transactions')->with('transactions',$transactions)
                                     ->with('team_id',$team_id);
@@ -75,7 +77,7 @@ class TransactionController extends Controller
 	$companies = Company::all();
 	$shortsold_shares = ShortsoldShare::all();
         $session = Session::orderBy('time','desc')->first()->id;
-	foreach ($companies as $company) {
+/*	foreach ($companies as $company) {
 		$transactions = Transaction::where('session_id','=',$session)
 					->where('company_id','=',$company->id)
 					->get();
@@ -100,7 +102,7 @@ class TransactionController extends Controller
 			}	
 		}
 		$company->save();
-	}
+	}*/
 	foreach($company_dividends as $company_dividend) {
             if ($company_dividend->profit_or_loss) {
                 $shares = Share::where('company_id','=',$company_dividend->company_id)
