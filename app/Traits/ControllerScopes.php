@@ -28,7 +28,7 @@ trait ControllerScopes {
                 sell_share(1,1,1);
                 To call the function from a controller,
                 ControllerScopes::sell_share(1,1,1);
-    */
+   */
     public static function sell_share($team_id,$company_id,$amount) {
         $share = Share::where('team_id','=',$team_id)
                             ->where('company_id','=',$company_id)
@@ -41,7 +41,7 @@ trait ControllerScopes {
         if (empty($share)) {
             return 10;
         }
-        $shortsold_share = ShortsoldShare::where('share_id','=',$share->id)->first();
+        //$shortsold_share = ShortsoldShare::where('share_id','=',$share->id)->first();
         if ($amount == 0 || $share->amount == 0 || $amount < 0) {
             return 12;
         }
@@ -50,15 +50,13 @@ trait ControllerScopes {
         }
         else {
             $share->amount -= $amount;
-            if ($share->amount == 0 && empty($shortsold_share)) {
+            if ($share->amount == 0) {
                 $share->delete();
             }
             else {
                 $share->save();
             }
         }
-        $company->no_of_shares += $amount;
-        $company->save();
         //$team->balance += $company->rate * $amount;
         $team->balance += 0.98 * $company->rate * $amount;  //2% brokerage fees
         $team->save();
@@ -112,8 +110,8 @@ trait ControllerScopes {
         $share->save();
         $team->balance -= $company->rate * $amount;
         $team->save();
-        $company->no_of_shares -= $amount;
-        $company->save();
+        //$company->no_of_shares -= $amount;
+        //$company->save();
         return 0;
     }
 
@@ -217,11 +215,11 @@ trait ControllerScopes {
         //if ($share->amount < $amount) {
         //    return 11;
         //}
-        $company = Company::where('id','=',$share->company_id)->first();
+        $company = Company::where('id','=',$company_id)->first();
         DB::insert("INSERT INTO shortsold_shares (team_id,company_id,amount,rate) 
         values($team_id,$company_id,$amount,$company->rate);");
-        $share->amount -= $amount;
-        $share->save();
+        //$share->amount -= $amount;
+        //$share->save();
         return 0;
     }
 
@@ -266,7 +264,7 @@ trait ControllerScopes {
         if ($amount > $shortsold_share->amount) {
             return 17;
         }
-        $company = Company::where('id','=',$share->company_id)->first();
+        $company = Company::where('id','=',$company_id)->first();
         $team = Team::where('id','=',$team_id)->first();
         $buy_back_factor = ($shortsold_share->rate - $company->rate) * $amount;
         if ($buy_back_factor < 0 && $team->balance < $buy_back_factor) {
@@ -276,7 +274,7 @@ trait ControllerScopes {
             $team->balance += $buy_back_factor;
         }
         $shortsold_share->amount -= $amount;
-        $share->amount += $amount;
+        //$share->amount += $amount;
         if ($shortsold_share->amount == 0) {
             DB::delete("DELETE FROM shortsold_shares 
 	    WHERE team_id = $team_id
