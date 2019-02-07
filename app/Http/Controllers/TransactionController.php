@@ -46,9 +46,9 @@ class TransactionController extends Controller
         if ($error_code) {
             return back()->with('error',ControllerScopes::error($error_code));
         }
-        //$error_code = ControllerScopes::adjust_rate($request->input('amount'),
-        //            $request->input('company_id'),
-        //            $request->input('buy_sell'));
+        $error_code = ControllerScopes::adjust_rate($request->input('amount'),
+                    $request->input('company_id'),
+                    $request->input('buy_sell'));
         $transaction->team_id = $request->input('team_id');
         $transaction->company_id = $request->input('company_id');
         $transaction->amount = $request->input('amount');
