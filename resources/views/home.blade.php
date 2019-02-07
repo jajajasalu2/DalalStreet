@@ -13,12 +13,8 @@
                         <option value={{$company->id}}>{{$company->name}}</option>
                     @endforeach
                 </select>
-                <select name="team_id">
-                    @foreach ($teams as $team)
-                        <option value={{$team->id}}>{{$team->id}}</option>
-                    @endforeach
-                </select>
-                {{Form::text('amount','',['class'=>'form_control','placeholder'=>'Amount'])}}
+                {{Form::number('team_id','',['class'=>'form_control','placeholder'=>'Team ID'])}}
+                {{Form::number('amount','',['class'=>'form_control','placeholder'=>'Amount'])}}
                 <select name="buy_sell">
                     <option value=1>Buy</option>
                     <option value=2>Sell</option>

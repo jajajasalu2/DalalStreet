@@ -12,6 +12,14 @@
                         @csrf
 
                         <div class="form-group row">
+                            <label for="id" class="col-md-4 col-form-label text-md-right">User ID:</label>
+                            <div class="col-md-6">
+                                <input id="id" type="number" class="form-control" name="id" required>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                             <div class="col-md-6">
@@ -53,11 +61,21 @@
                             </div>
                         </div>
 
+
                         <div class="form-group row">
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group row">
+                            <label for="team" class="col-md-4 col-form-label text-md-right">Team ID:</label>
+                            <div class="col-md-6">
+                                <input id="team" type="number" class="form-control" name="team" required>
                             </div>
                         </div>
 

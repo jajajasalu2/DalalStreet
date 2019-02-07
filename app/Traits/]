@@ -124,11 +124,9 @@ trait ControllerScopes {
 		while (1) {
 			$temp = $num % 10;
 			$num/=10;
-			$num = intval($num);
 			$tens_unit++;
 			if ($num == 0) break;
 		}
-		return ($temp * pow(10,$tens_unit) / 10);
 	}
 
     /*
@@ -174,17 +172,16 @@ trait ControllerScopes {
         else {
             $changeRate = ControllerScopes::random_in_range(10,20); // 10 to 20
         }
-	$rate_factor = ControllerScopes::rate_factor($company->rate);
+		
         if ($buy_or_sell == 1) {
             //$company->rate += $bought*mt_rand()/mt_getrandmax();
-		$company->rate = $company->rate *(1+$changeRate/$rate_factor);
+				$company->rate = $company->rate *(1+$changeRate/9000);
 		    //$company->rate = $company->rate * (1+$changeRate / 100);
         }
         else if ($buy_or_sell == 2) {
-		    $company->rate = $company->rate * (1-$changeRate/$rate_factor);
+		    $company->rate = $company->rate * (1-$changeRate/9000);
             //$company->rate -= $sold*mt_rand()/mt_getrandmax();
         }
-	if ($company->rate < $rate_factor) $company->rate = $rate_factor;
         $company->save();
         return 0;
     }
@@ -335,14 +332,12 @@ trait ControllerScopes {
     	$user = Auth::user();
 	if ($user->role == 1 || $user->role == 2) return 0;
 	else if ($user->role == 3) {
-		$user_team = DB::table('user_teams')
+		$user_team_id = DB::table('user_teams')
+			->select('user_id')
 			->where('team_id','=',$team_id)
-			->first();
-		if (empty($user_team)) return 21;
-		else {
-			$user_id = $user_team->user_id;
-			if ($user_id != auth()->id()) return 21;
-		}
+			->first()
+			->user_id;
+		if ($user_team_id != $user->id) return 21;
 	}
 	return 0;
     }
@@ -359,7 +354,7 @@ trait ControllerScopes {
 	    17 => 'You haven\'t short sold enough shares of this company',
 	    20 => 'You can\'t have more than 2000 shares of a company at a time',
 	    21 => 'Permission Denied',
-	    22 => 'You can\'t short sell more than 2000 shares of a company in one session',
+	    22 => 'You can\'t short sell more than 2000 shares of a company in one session'
         ];
         return $errors[$error_code];
     }
