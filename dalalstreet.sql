@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 08, 2019 at 11:49 PM
+-- Generation Time: Feb 08, 2019 at 11:59 PM
 -- Server version: 5.7.25-0ubuntu0.18.04.2
 -- PHP Version: 7.2.14-1+ubuntu18.04.1+deb.sury.org+1
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `companies` (
   `id` int(11) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
-  `rate` float DEFAULT NULL,
+  `rate` double DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `type` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
@@ -40,7 +40,7 @@ CREATE TABLE `companies` (
 --
 
 INSERT INTO `companies` (`id`, `name`, `rate`, `updated_at`, `type`, `created_at`) VALUES
-(1, 'company', 8908.2, '2019-02-08 12:45:53', 'COMPANY', '2019-02-07 00:08:06'),
+(1, 'company', 8908.2021484375, '2019-02-08 12:45:53', 'COMPANY', '2019-02-07 00:08:06'),
 (2, 'ibm', 2020, NULL, 'COMPANY', NULL);
 
 -- --------------------------------------------------------
@@ -170,7 +170,7 @@ INSERT INTO `shortsold_shares` (`team_id`, `company_id`, `amount`, `created_at`,
 --
 
 CREATE TABLE `teams` (
-  `id` int(11) NOT NULL,
+  `id` int(255) NOT NULL,
   `balance` float DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
