@@ -71,6 +71,15 @@
                         </div>
 
 
+                        <div class="form-group row">
+                            <label for="counter-password" class="col-md-4 col-form-label text-md-right">{{ __('Counter Password') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="counter-password" type="password" class="form-control" name="counter_password" required>
+                            </div>
+                        </div>
+
+
 
                         <div class="form-group row">
                             <label for="team" class="col-md-4 col-form-label text-md-right">Team ID:</label>

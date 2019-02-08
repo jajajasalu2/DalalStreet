@@ -12,6 +12,11 @@
 @foreach($shares as $share)
 <p>{{$share->company_name()}}: {{$share->amount}}</p>
 @endforeach
+<hr/>
+<h3>Shortsold Shares: </h3>
+@foreach($shortsold_shares as $shortsold_share)
+<p>{{$shortsold_share->company_name()}}: {{$shortsold_share->amount}}</p>
+@endforeach
 @endif
 <hr/>
 <a href="/transactions/{{$team->id}}">Transactions</a>

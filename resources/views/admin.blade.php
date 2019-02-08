@@ -23,4 +23,17 @@
             </div>
     </div>
 </div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                {!!Form::open(['action'=>'TransactionController@session_end','method'=>'GET','enctype'=>'multipart/form-data'])!!}
+                {{Form::submit('End Session',['class'=>'btn btn-danger'])}}
+                {!!Form::close()!!}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

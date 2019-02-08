@@ -15,18 +15,17 @@ use App\Company;
 use App\Team;
 
 Route::get('/', function () {
-    $companies = Company::all();
-    $teams = Team::all();
-    return view('home')->with('companies',$companies)
-                       ->with('teams',$teams);
+	return view('dalal');
 });
 
 Route::get('/home', function () {
-    $companies = Company::all();
-    $teams = Team::all();
-    return view('home')->with('companies',$companies)
-                       ->with('teams',$teams);
+	return view('dalal');
 });
+
+
+Route::get('/teams',['middleware'=>['auth','counter'],'uses'=>'TeamController@show_all']);
+
+Route::get('/companies',['middleware'=>['auth'],'uses'=>'CompanyController@show_all']);
 
 Route::post('/create',['middleware'=>['auth','counter'],'uses'=>'TransactionController@create']);
 
