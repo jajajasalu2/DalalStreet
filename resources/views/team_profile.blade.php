@@ -14,6 +14,10 @@
 @endforeach
 @endif
 <hr/>
+<h3>Shortsold Shares: </h3>
+@foreach($shortsold_shares as $shortsold_share)
+<p>{{$shortsold_share->company_name()}}: {{$shortsold_share->amount}}, Rate: {{$shortsold_share->rate}}</p>
+@endforeach
 <a href="/transactions/{{$team->id}}">Transactions</a>
 </div>
 @endsection

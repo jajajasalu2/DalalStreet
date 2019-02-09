@@ -28,6 +28,13 @@ Route::get('/home', function () {
                        ->with('teams',$teams);
 });
 
+
+Route::get('/rates',['middleware'=>['auth'],function() {
+	return view('ajax');
+}]);
+
+Route::post('/get_rates',['middleware'=>['auth'],'uses'=>'AjaxController@index']);
+
 Route::post('/create',['middleware'=>['auth','counter'],'uses'=>'TransactionController@create']);
 
 Route::get('/flush',['middleware'=>['auth','admin'],'uses'=>'TransactionController@session_end']);

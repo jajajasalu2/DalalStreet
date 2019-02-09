@@ -35,6 +35,7 @@ trait ControllerScopes {
                             ->first();
         $company = Company::where('id','=',$company_id)->first();
         $team = Team::where('id','=',$team_id)->first();
+	if (empty($team)) return 25;
         if (empty($share)) {
             return 10;
         }
@@ -83,6 +84,7 @@ trait ControllerScopes {
                             ->first();
         $company = Company::where('id','=',$company_id)->first();
         $team = Team::where('id','=',$team_id)->first();
+	if (empty($team)) return 25;
 		if ($amount == 0 || $amount < 0) {
             return 12;
         }
@@ -217,6 +219,7 @@ trait ControllerScopes {
 		    				->where('company_id','=',$company_id)
 						->first();
         $company = Company::where('id','=',$company_id)->first();
+	if (empty($team)) return 25;
         if ($amount == 0 || $amount < 0) {
             return 12;
         }
@@ -229,6 +232,9 @@ trait ControllerScopes {
 			return 0;
 		}
         }
+	else {
+		if ($amount > 2000) return 21;
+	}
         //if ($share->amount < $amount) {
         //    return 11;
         //}
@@ -271,6 +277,7 @@ trait ControllerScopes {
 	    $shortsold_share = ShortsoldShare::where('team_id','=',$team_id)
 		    ->where('company_id','=',$company_id)
 		    ->first();
+	if (empty($team)) return 25;
         if (empty($shortsold_share)) {
             return 16;
         }
@@ -359,7 +366,8 @@ trait ControllerScopes {
 	    17 => 'You haven\'t short sold enough shares of this company',
 	    20 => 'You can\'t have more than 2000 shares of a company at a time',
 	    21 => 'Permission Denied',
-	    22 => 'You can\'t short sell more than 2000 shares of a company in one session',
+	    22 => 'You can\'t short sell more than 2000 shares of a company in one session',	
+	    25 => 'This team does not exist'
         ];
         return $errors[$error_code];
     }

@@ -71,7 +71,7 @@ class RegisterController extends Controller
 	if (empty($team)) {
 		$team = new Team;
 		$team->id = $data['team'];
-		$team->balance = 10000;	
+		$team->balance = 1000000;	
 		DB::insert("insert into teams (id,balance) values($team->id,$team->balance);");
 	}
 	$user_id = $data['id'];

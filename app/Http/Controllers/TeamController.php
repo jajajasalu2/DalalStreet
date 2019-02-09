@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Team;
 use App\Share;
 use App\Company;
+use App\ShortsoldShare;
 use Auth;
 use App\Traits\ControllerScopes;
 use DB;
@@ -21,7 +22,10 @@ class TeamController extends Controller
             return back()->with('error','No such team registered');
         }
         $shares = Share::where('team_id','=',$team_id)->get();
+	$shortsold_shares = ShortsoldShare::where('team_id','=',$team_id)
+				->get();
         return view('team_profile')->with('team',$team)
-                                    ->with('shares',$shares);
+                                    ->with('shares',$shares)
+					->with('shortsold_shares',$shortsold_shares);
     }
 }
