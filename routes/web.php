@@ -22,6 +22,11 @@ Route::get('/home', function () {
 	return view('dalal');
 });
 
+Route::get('/rates',['middleware'=>['auth'],function() {
+	return view('rates');
+}]);
+
+Route::post('/get_rates','CompanyController@get_rates');
 
 Route::get('/teams',['middleware'=>['auth','counter'],'uses'=>'TeamController@show_all']);
 

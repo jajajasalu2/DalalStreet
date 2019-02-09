@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
 use App\Company;
 use App\CompanyDividend;
 use App\CompanyBonus;
@@ -18,8 +20,13 @@ class CompanyController extends Controller
     }
 
     public function show_all() {
-	$companies = Company::all();
+    	$companies = Company::all();
     	return view('companies')->with('companies',$companies);
+    }
+
+    public function get_rates(Request $request) {
+    	$companies = Company::all();
+	return response()->json(array('companies'=>$companies),200);
     }
 
     public function store(Request $request) {

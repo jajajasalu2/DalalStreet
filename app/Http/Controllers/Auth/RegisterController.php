@@ -54,7 +54,7 @@ class RegisterController extends Controller
 	    'id' => 'required',
 	    'team' => 'required',
 	    'counter_password' => 'required',
-            'name' => 'required|string|max:255',
+            //'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -81,7 +81,7 @@ class RegisterController extends Controller
 	DB::insert("insert into user_teams (user_id,team_id) values($user_id,$team_id);");
         return User::create([
 	    'id' => $data['id'],
-            'name' => $data['name'],
+         //   'name' => $data['name'],
             'email' => $data['email'],
 	    'role' => 3,
             'password' => Hash::make($data['password']),
