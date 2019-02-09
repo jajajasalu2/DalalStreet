@@ -6,18 +6,9 @@
 <h3>Balance: {{$team->balance}}</h3>
 <hr/>
 <h3>Shares: </h3>
-@if (empty($shares))
-<p>You currently have no shares in any company/forex.</p>
-@else
 @foreach($shares as $share)
 <p>{{$share->company_name()}}: {{$share->amount}}</p>
 @endforeach
-<hr/>
-<h3>Shortsold Shares: </h3>
-@foreach($shortsold_shares as $shortsold_share)
-<p>{{$shortsold_share->company_name()}}: {{$shortsold_share->amount}}</p>
-@endforeach
-@endif
 <hr/>
 <h3>Shortsold Shares: </h3>
 @foreach($shortsold_shares as $shortsold_share)

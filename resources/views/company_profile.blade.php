@@ -32,12 +32,13 @@
                 </select>
 
 		<br/>
-                {{Form::submit('Commit',['class'=>'btn btn-primary'])}}
+                {{Form::submit('Commit',['id'=>'commit-button','class'=>'btn btn-primary'])}}
 {!!Form::close()!!}
 </div>
 </div>
 </div>
 </div>
+
 @endif
 </div>
 @endsection

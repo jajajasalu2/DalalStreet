@@ -22,8 +22,6 @@ class TransactionController extends Controller
             'team_id'=>'required',
             'amount'=>'required',
             'buy_sell'=>'required']);
-	$check_counter = ControllerScopes::counter_security_check($request->input('company_id'));
-	if ($check_counter) return back()->with('error',ControllerScopes::error($check_counter));
         $transaction = new Transaction;
         if ($request->input('buy_sell') == 1) {
             $error_code = ControllerScopes::buy_share($request->input('team_id'),
@@ -146,5 +144,88 @@ class TransactionController extends Controller
         $session = new Session;
         $session->save();
         return back()->with('success','Session Ended.');
+    }
+
+    public function end_game() {
+	$company_dividends = CompanyDividend::all();
+        $company_bonuses = CompanyBonus::all();
+	$companies = Company::all();
+	$shortsold_shares = ShortsoldShare::all();
+	$shares = Share::all();
+	return $shares;
+        $session = Session::orderBy('time','desc')->first()->id;
+/*	foreach ($companies as $company) {
+		$transactions = Transaction::where('session_id','=',$session)
+					->where('company_id','=',$company->id)
+					->get();
+		foreach ($transactions as $transaction) {
+			if ($transaction->amount <= 100) {
+				$changeRate = ControllerScopes::random_in_range(1,2); // 1 to 2 
+			}
+			else if ($transaction->amount <= 500) {
+			   $changeRate = ControllerScopes::random_in_range(2,5);  // 2 to 5
+			}
+			else if ($transaction->amount <= 1000) {
+			    $changeRate = ControllerScopes::random_in_range(5,10); // 5 to 10
+			}
+			else {
+			    $changeRate = ControllerScopes::random_in_range(10,20); // 10 to 20
+			}
+			if ($transaction->buy_sell == 1) {
+			    $company->rate = $company->rate *(1+$changeRate/100);
+			}
+			else if ($transaction->buy_sell == 2) {
+			    $company->rate = $company->rate * (1-$changeRate/100);
+			}	
+		}
+		$company->save();
+	}*/
+	foreach($company_dividends as $company_dividend) {
+            if ($company_dividend->profit_or_loss) {
+                $shares = Share::where('company_id','=',$company_dividend->company_id)
+                                ->where('amount','>=',$company_dividend->shares_per_dividend)
+                                ->get();
+		$no_of_shares = 0;
+		foreach ($shares as $share) {
+			$no_of_shares += $share->amount;
+		}
+                foreach($shares as $share) {
+                    $team = Team::where('id','=',$share->team_id)
+                                ->first();
+                    $dividend_factor = intval($share->amount/$company_dividend->shares_per_dividend);
+                    $team->balance += ($company_dividend->dividend/$no_of_shares) * $dividend_factor; // company dividiend->dividend = profit
+                    $team->save();
+                }
+                DB::delete("DELETE FROM company_dividends 
+                WHERE company_id=$company_dividend->company_id;");
+            }
+        }
+
+        foreach($company_bonuses as $company_bonus) {
+            $shares = Share::where('company_id','=',$company_bonus->company_id)
+                            ->where('amount','>=',$company_bonus->bonus)
+                            ->get();
+            foreach ($shares as $share) {
+                $team = Team::where('id','=',$share->team_id)
+                    ->first();
+                $bonus_factor = intval($share->amount/$company_bonus->shares_per_bonus);
+                $team->balance += $company_bonus->bonus * $bonus_factor;
+                $team->save();
+            }
+        }
+
+        foreach ($shortsold_shares as $shortsold_share) {
+            $share = Share::where('id','=',$shortsold_share->share_id)->first();
+            $error_code = ControllerScopes::buy_back($shortsold_share->team_id,$shortsold_share->company_id,$shortsold_share->amount);
+        }
+
+	foreach ($shares as $share) {
+		$error_code = ControllerScopes::sell_share($share->team_id,$share->company_id,$share->amount);
+		return $error_code;
+	}
+        //$session = new Session;
+       // $session->save();
+        return back()->with('success','Fin.');
+
     }
 }

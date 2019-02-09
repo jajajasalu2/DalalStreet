@@ -11,11 +11,6 @@
                 <h2>{{$company->id}}</h2>
                 <p>{{$company->name}}</p>
                 <a class="btn btn-default" href="/edit/company/{{$company->id}}">Edit</a>
-                {!!Form::open(['action'=>'CompanyController@delete','method'=>'POST','enctype'=>'multipart/form-data'])!!}
-                {{Form::hidden('company_id',$company->id)}}
-                {{Form::hidden('delete_company',1)}}
-                {{Form::submit('Delete',['class'=>'btn btn-danger'])}}
-                {!!Form::close()!!}
                 <hr/>
                 @endforeach
                 </div>
@@ -30,6 +25,20 @@
                 <div class="card-body">
                 {!!Form::open(['action'=>'TransactionController@session_end','method'=>'GET','enctype'=>'multipart/form-data'])!!}
                 {{Form::submit('End Session',['class'=>'btn btn-danger'])}}
+                {!!Form::close()!!}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                {!!Form::open(['action'=>'TransactionController@end_game','method'=>'GET','enctype'=>'multipart/form-data'])!!}
+                {{Form::submit('End Game',['class'=>'btn btn-danger'])}}
                 {!!Form::close()!!}
                 </div>
             </div>

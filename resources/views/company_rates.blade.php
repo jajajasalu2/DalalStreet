@@ -18,8 +18,7 @@
 			<h4>FOREX</h4>	
 			@endif
 			<div class="col-md-12">
-			<h4>{{$company->rate}}</h4>
-			</div>
+			<h4>$company->rate</h4>
 			</div>
 		    </div>
 		    <hr/>

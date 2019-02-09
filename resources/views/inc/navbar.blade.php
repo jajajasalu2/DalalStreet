@@ -28,7 +28,11 @@
                                 @endif
                             </li>
                         @else
+			    <li class="nav-item">
+                                <a class="nav-link" href="/rules">Rules</a>
+                            </li>
 			    @if(Auth::user()->role != 3)
+			    
 			    <li class="nav-item">
                                 <a class="nav-link" href="/teams">Teams</a>
                             </li>

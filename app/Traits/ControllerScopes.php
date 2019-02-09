@@ -35,13 +35,12 @@ trait ControllerScopes {
                             ->where('company_id','=',$company_id)
                             ->first();
         $company = Company::where('id','=',$company_id)->first();
-<<<<<<< HEAD
+//<<<<<<< HEAD
         $team = Team::where('id','=',$team_id)->first();
 	if (empty($team)) return 25;
-=======
-	if (empty($team)) return 25;
+//=======
 	if (empty($company)) return 26;
->>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
+//>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
         if (empty($share)) {
             return 10;
         }
@@ -91,10 +90,10 @@ trait ControllerScopes {
         $company = Company::where('id','=',$company_id)->first();
         $team = Team::where('id','=',$team_id)->first();
 	if (empty($team)) return 25;
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
 	if (empty($company)) return 26;
->>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
+//>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
 		if ($amount == 0 || $amount < 0) {
             return 12;
         }
@@ -233,11 +232,11 @@ trait ControllerScopes {
     	$shortsold_share = ShortsoldShare::where('team_id','=',$team_id)
 		    				->where('company_id','=',$company_id)
 						->first();
-<<<<<<< HEAD
+//<<<<<<< HEAD
         $company = Company::where('id','=',$company_id)->first();
 	if (empty($team)) return 25;
-=======
->>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
+//=======
+//>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
         if ($amount == 0 || $amount < 0) {
             return 12;
         }
@@ -250,13 +249,10 @@ trait ControllerScopes {
 			return 0;
 		}
         }
-<<<<<<< HEAD
-	else {
-		if ($amount > 2000) return 21;
-	}
-=======
+//<<<<<<< HEAD
+//=======
 	else if ($amount > 2000) return 22;
->>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
+//>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
         //if ($share->amount < $amount) {
         //    return 11;
         //}
@@ -413,15 +409,13 @@ trait ControllerScopes {
 	    17 => 'You haven\'t short sold enough shares of this company',
 	    20 => 'You can\'t have more than 2000 shares of a company at a time',
 	    21 => 'Permission Denied',
-<<<<<<< HEAD
+//<<<<<<< HEAD
 	    22 => 'You can\'t short sell more than 2000 shares of a company in one session',	
-	    25 => 'This team does not exist'
-=======
-	    22 => 'You can\'t short sell more than 2000 shares of a company in one session',
-	    25 => 'Team not registered',
+//=======
+	    25 => 'This team does not exist',
 	    26 => 'Company does not exist',
 	    27 => 'Hey counter! You seem to be trading in the wrong company. Please trade from the company page assigned to you.'
->>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
+//>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
         ];
         return $errors[$error_code];
     }
