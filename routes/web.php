@@ -15,25 +15,31 @@ use App\Company;
 use App\Team;
 
 Route::get('/', function () {
-    $companies = Company::all();
-    $teams = Team::all();
-    return view('home')->with('companies',$companies)
-                       ->with('teams',$teams);
+	return view('dalal');
 });
 
 Route::get('/home', function () {
-    $companies = Company::all();
-    $teams = Team::all();
-    return view('home')->with('companies',$companies)
-                       ->with('teams',$teams);
+	return view('dalal');
 });
 
+<<<<<<< HEAD
 
 Route::get('/rates',['middleware'=>['auth'],function() {
 	return view('ajax');
 }]);
 
 Route::post('/get_rates',['middleware'=>['auth'],'uses'=>'AjaxController@index']);
+=======
+Route::get('/rates',['middleware'=>['auth'],function() {
+	return view('rates');
+}]);
+
+Route::post('/get_rates','CompanyController@get_rates');
+
+Route::get('/teams',['middleware'=>['auth','counter'],'uses'=>'TeamController@show_all']);
+
+Route::get('/companies',['middleware'=>['auth'],'uses'=>'CompanyController@show_all']);
+>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
 
 Route::post('/create',['middleware'=>['auth','counter'],'uses'=>'TransactionController@create']);
 

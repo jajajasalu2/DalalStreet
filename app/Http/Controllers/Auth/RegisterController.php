@@ -53,7 +53,8 @@ class RegisterController extends Controller
         return Validator::make($data, [
 	    'id' => 'required',
 	    'team' => 'required',
-            'name' => 'required|string|max:255',
+	    'counter_password' => 'required',
+            //'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -67,6 +68,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+	if ($data['counter_password'] == 'icantsay6699') {
 	$team = Team::where('id','=',$data['team'])->first();
 	if (empty($team)) {
 		$team = new Team;
@@ -79,10 +81,11 @@ class RegisterController extends Controller
 	DB::insert("insert into user_teams (user_id,team_id) values($user_id,$team_id);");
         return User::create([
 	    'id' => $data['id'],
-            'name' => $data['name'],
+         //   'name' => $data['name'],
             'email' => $data['email'],
 	    'role' => 3,
             'password' => Hash::make($data['password']),
-        ]);
+    ]);
+	}
     }
 }

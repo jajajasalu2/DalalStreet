@@ -30,12 +30,18 @@ trait ControllerScopes {
                 ControllerScopes::sell_share(1,1,1);
    */
     public static function sell_share($team_id,$company_id,$amount) {
+        $team = Team::where('id','=',$team_id)->first();
         $share = Share::where('team_id','=',$team_id)
                             ->where('company_id','=',$company_id)
                             ->first();
         $company = Company::where('id','=',$company_id)->first();
+<<<<<<< HEAD
         $team = Team::where('id','=',$team_id)->first();
 	if (empty($team)) return 25;
+=======
+	if (empty($team)) return 25;
+	if (empty($company)) return 26;
+>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
         if (empty($share)) {
             return 10;
         }
@@ -81,10 +87,14 @@ trait ControllerScopes {
     public static function buy_share($team_id,$company_id,$amount) {
         $share = Share::where('team_id','=',$team_id)
                             ->where('company_id','=',$company_id)
-                            ->first();
+                           ->first();
         $company = Company::where('id','=',$company_id)->first();
         $team = Team::where('id','=',$team_id)->first();
 	if (empty($team)) return 25;
+<<<<<<< HEAD
+=======
+	if (empty($company)) return 26;
+>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
 		if ($amount == 0 || $amount < 0) {
             return 12;
         }
@@ -110,6 +120,7 @@ trait ControllerScopes {
         //}
         $share->save();
         $team->balance -= $company->rate * $amount;
+	if ($team->balance < 100) $team->balance = 100;
         $team->save();
         //$company->no_of_shares -= $amount;
         //$company->save();
@@ -215,26 +226,37 @@ trait ControllerScopes {
         //if (empty($share)) {
         //    return 10;
         //}
+	$team = Team::where('id','=',$team_id)->first();
+        $company = Company::where('id','=',$company_id)->first();
+	if (empty($team)) return 25;
+	if (empty($company)) return 26;
     	$shortsold_share = ShortsoldShare::where('team_id','=',$team_id)
 		    				->where('company_id','=',$company_id)
 						->first();
+<<<<<<< HEAD
         $company = Company::where('id','=',$company_id)->first();
 	if (empty($team)) return 25;
+=======
+>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
         if ($amount == 0 || $amount < 0) {
             return 12;
         }
         if (!empty($shortsold_share)) {
 		if ($shortsold_share->amount + $amount > 2000)
-            		return 21;
+            		return 22;
 		else {
 			$total_amount = $shortsold_share->amount + $amount;
 			DB::statement("UPDATE shortsold_shares set rate=$company->rate,amount=$total_amount where team_id=$team_id and company_id=$company_id;");
 			return 0;
 		}
         }
+<<<<<<< HEAD
 	else {
 		if ($amount > 2000) return 21;
 	}
+=======
+	else if ($amount > 2000) return 22;
+>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
         //if ($share->amount < $amount) {
         //    return 11;
         //}
@@ -274,7 +296,11 @@ trait ControllerScopes {
         //if (empty($share)) {
         //    return 10;
         //}
-	    $shortsold_share = ShortsoldShare::where('team_id','=',$team_id)
+	$team = Team::where('id','=',$team_id)->first();
+        $company = Company::where('id','=',$company_id)->first();
+	if (empty($team)) return 25;
+	if (empty($company)) return 26;
+	$shortsold_share = ShortsoldShare::where('team_id','=',$team_id)
 		    ->where('company_id','=',$company_id)
 		    ->first();
 	if (empty($team)) return 25;
@@ -287,11 +313,10 @@ trait ControllerScopes {
         if ($amount > $shortsold_share->amount) {
             return 17;
         }
-        $company = Company::where('id','=',$company_id)->first();
-        $team = Team::where('id','=',$team_id)->first();
         $buy_back_factor = ($shortsold_share->rate - $company->rate) * $amount;
         if ($buy_back_factor < 0 && $team->balance < $buy_back_factor) {
             $team->balance -= 0.1 * $team->balance;
+	    if ($team->balance < 100) $team->balance = 100;
         }
         else {
             $team->balance += $buy_back_factor;
@@ -354,6 +379,28 @@ trait ControllerScopes {
 	return 0;
     }
 
+
+    public static function counter_security_check($company_id) {
+    	$user = Auth::user();
+	if ($user->role == 1) return 0;
+	else if ($user->role == 2) {
+		$user_companies = DB::table('user_company')
+			->where('company_id','=',$company_id)
+			->get();
+		if (empty($user_companies)) return 27;
+		$flag = 1;
+		foreach ($user_companies as $user_company) {
+			if ($user_company->user_id == $user->id){
+				$flag = 0;
+				break;
+			}
+		}
+		if ($flag) return 27;
+	}
+	else if ($user->role == 3) return 21;
+	return 0;
+    }
+
     public static function error($error_code) {
         $errors = [
             10 => 'You don\'t have a share in this company',
@@ -366,8 +413,15 @@ trait ControllerScopes {
 	    17 => 'You haven\'t short sold enough shares of this company',
 	    20 => 'You can\'t have more than 2000 shares of a company at a time',
 	    21 => 'Permission Denied',
+<<<<<<< HEAD
 	    22 => 'You can\'t short sell more than 2000 shares of a company in one session',	
 	    25 => 'This team does not exist'
+=======
+	    22 => 'You can\'t short sell more than 2000 shares of a company in one session',
+	    25 => 'Team not registered',
+	    26 => 'Company does not exist',
+	    27 => 'Hey counter! You seem to be trading in the wrong company. Please trade from the company page assigned to you.'
+>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
         ];
         return $errors[$error_code];
     }

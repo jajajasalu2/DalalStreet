@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
 use App\Company;
 use App\CompanyDividend;
 use App\CompanyBonus;
@@ -15,6 +17,16 @@ class CompanyController extends Controller
     use ControllerScopes;
     public function create() {
         return view('create_company');
+    }
+
+    public function show_all() {
+    	$companies = Company::all();
+    	return view('companies')->with('companies',$companies);
+    }
+
+    public function get_rates(Request $request) {
+    	$companies = Company::all();
+	return response()->json(array('companies'=>$companies),200);
     }
 
     public function store(Request $request) {
@@ -76,7 +88,8 @@ class CompanyController extends Controller
         $this->validate($request,[
             'company_id'=>'required',
             'name'=>'required',
-            'rate'=>'required',
+	    'rate_change' => 'required',
+           // 'rate'=>'required',
     //        'value'=>'required',
     //        'no_of_shares'=>'required',
             'type'=>'required',
@@ -85,7 +98,8 @@ class CompanyController extends Controller
         ]);
         $company = Company::where('id','=',$request->input('company_id'))->first();
         $company->name = $request->input('name');
-        $company->rate = $request->input('rate');
+	$company->rate += $request->input('rate_change');
+   //     $company->rate = $request->input('rate');
    //     $company->value = $request->input('value');
    //     $company->no_of_shares = $request->input('no_of_shares');
         $company->type = $request->input('type');

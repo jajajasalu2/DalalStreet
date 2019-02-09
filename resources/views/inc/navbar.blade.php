@@ -28,12 +28,26 @@
                                 @endif
                             </li>
                         @else
+			    @if(Auth::user()->role != 3)
+			    <li class="nav-item">
+                                <a class="nav-link" href="/teams">Teams</a>
+                            </li>
+		            @endif	
+	    	    	    <li class="nav-item">
+                                <a class="nav-link" href="/companies">Companies</a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+				    {{Auth::user()->email}} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+				@if(Auth::user()->role == 3) 
+				    <a class="dropdown-item" href="/team/{{Auth::user()->user_team()}}">
+                                        Profile
+                                    </a>
+				@endif
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

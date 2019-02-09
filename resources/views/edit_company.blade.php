@@ -9,13 +9,11 @@
                 {!!Form::open(['action'=>'CompanyController@update','method'=>'POST','enctype'=>'multipart/form-data'])!!}
                 {{Form::hidden('company_id',$company->id)}}
                 <br/>Name: {{Form::text('name',$company->name,['class'=>'form_control'])}}
-                
-                
-                <br/>Rate: {{Form::number('rate',$company->rate,['step'=>0.01,'class'=>'form_control'])}}
-                
-                
+
+                <br/>Rate Change: {{Form::number('rate_change','',['step'=>0.01,'class'=>'form_control'])}}
+
                 <br/>Type: {{Form::text('type',$company->type,['class'=>'form_control'])}}
-                
+
                 <br/>Profit/loss:
 
                 <select name="profit_or_loss">

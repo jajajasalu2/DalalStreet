@@ -22,6 +22,8 @@ class TransactionController extends Controller
             'team_id'=>'required',
             'amount'=>'required',
             'buy_sell'=>'required']);
+	$check_counter = ControllerScopes::counter_security_check($request->input('company_id'));
+	if ($check_counter) return back()->with('error',ControllerScopes::error($check_counter));
         $transaction = new Transaction;
         if ($request->input('buy_sell') == 1) {
             $error_code = ControllerScopes::buy_share($request->input('team_id'),
@@ -139,7 +141,7 @@ class TransactionController extends Controller
 
         foreach ($shortsold_shares as $shortsold_share) {
             $share = Share::where('id','=',$shortsold_share->share_id)->first();
-            $error_code = ControllerScopes::buy_back($share->team_id,$share->company_id,$shortsold_share->amount);
+            $error_code = ControllerScopes::buy_back($shortsold_share->team_id,$shortsold_share->company_id,$shortsold_share->amount);
         }
         $session = new Session;
         $session->save();
