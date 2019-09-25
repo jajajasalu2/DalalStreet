@@ -77,32 +77,7 @@ class TransactionController extends Controller
 	$companies = Company::all();
 	$shortsold_shares = ShortsoldShare::all();
         $session = Session::orderBy('time','desc')->first()->id;
-/*	foreach ($companies as $company) {
-		$transactions = Transaction::where('session_id','=',$session)
-					->where('company_id','=',$company->id)
-					->get();
-		foreach ($transactions as $transaction) {
-			if ($transaction->amount <= 100) {
-				$changeRate = ControllerScopes::random_in_range(1,2); // 1 to 2 
-			}
-			else if ($transaction->amount <= 500) {
-			   $changeRate = ControllerScopes::random_in_range(2,5);  // 2 to 5
-			}
-			else if ($transaction->amount <= 1000) {
-			    $changeRate = ControllerScopes::random_in_range(5,10); // 5 to 10
-			}
-			else {
-			    $changeRate = ControllerScopes::random_in_range(10,20); // 10 to 20
-			}
-			if ($transaction->buy_sell == 1) {
-			    $company->rate = $company->rate *(1+$changeRate/100);
-			}
-			else if ($transaction->buy_sell == 2) {
-			    $company->rate = $company->rate * (1-$changeRate/100);
-			}	
-		}
-		$company->save();
-	}*/
+
 	foreach($company_dividends as $company_dividend) {
             if ($company_dividend->profit_or_loss) {
                 $shares = Share::where('company_id','=',$company_dividend->company_id)
@@ -152,34 +127,11 @@ class TransactionController extends Controller
 	$companies = Company::all();
 	$shortsold_shares = ShortsoldShare::all();
 	$shares = Share::all();
-	return $shares;
+<<<<<<< HEAD
+	
+=======
+>>>>>>> ed2d7326f69491f024c7a7283da90640232ce5e4
         $session = Session::orderBy('time','desc')->first()->id;
-/*	foreach ($companies as $company) {
-		$transactions = Transaction::where('session_id','=',$session)
-					->where('company_id','=',$company->id)
-					->get();
-		foreach ($transactions as $transaction) {
-			if ($transaction->amount <= 100) {
-				$changeRate = ControllerScopes::random_in_range(1,2); // 1 to 2 
-			}
-			else if ($transaction->amount <= 500) {
-			   $changeRate = ControllerScopes::random_in_range(2,5);  // 2 to 5
-			}
-			else if ($transaction->amount <= 1000) {
-			    $changeRate = ControllerScopes::random_in_range(5,10); // 5 to 10
-			}
-			else {
-			    $changeRate = ControllerScopes::random_in_range(10,20); // 10 to 20
-			}
-			if ($transaction->buy_sell == 1) {
-			    $company->rate = $company->rate *(1+$changeRate/100);
-			}
-			else if ($transaction->buy_sell == 2) {
-			    $company->rate = $company->rate * (1-$changeRate/100);
-			}	
-		}
-		$company->save();
-	}*/
 	foreach($company_dividends as $company_dividend) {
             if ($company_dividend->profit_or_loss) {
                 $shares = Share::where('company_id','=',$company_dividend->company_id)
@@ -221,7 +173,7 @@ class TransactionController extends Controller
 
 	foreach ($shares as $share) {
 		$error_code = ControllerScopes::sell_share($share->team_id,$share->company_id,$share->amount);
-		return $error_code;
+		
 	}
         //$session = new Session;
        // $session->save();

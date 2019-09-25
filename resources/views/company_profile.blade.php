@@ -19,7 +19,7 @@
 
 		<br/>
 
-		{{Form::label('amount','Amount')}}
+		{{Form::label('amount','No of Shares')}}
                 {{Form::number('amount','',['class'=>'form_control','placeholder'=>'Amount'])}}
 
 		<br/>
