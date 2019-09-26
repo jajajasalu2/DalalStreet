@@ -64,7 +64,7 @@ class TransactionController extends Controller
     }
 
     public function show($team_id) {
-	$error_code = ControllerScopes::security_check($team_id);	
+	$error_code = ControllerScopes::security_check($team_id);
 	if ($error_code) return back()->with('error',ControllerScopes::error($error_code));
         $transactions = Transaction::where('team_id','=',$team_id)->get();
         return view('transactions')->with('transactions',$transactions)
@@ -94,7 +94,7 @@ class TransactionController extends Controller
                     $team->balance += ($company_dividend->dividend/$no_of_shares) * $dividend_factor; // company dividiend->dividend = profit
                     $team->save();
                 }
-                DB::delete("DELETE FROM company_dividends 
+                DB::delete("DELETE FROM company_dividends
                 WHERE company_id=$company_dividend->company_id;");
             }
         }
@@ -127,10 +127,6 @@ class TransactionController extends Controller
 	$companies = Company::all();
 	$shortsold_shares = ShortsoldShare::all();
 	$shares = Share::all();
-<<<<<<< HEAD
-	
-=======
->>>>>>> ed2d7326f69491f024c7a7283da90640232ce5e4
         $session = Session::orderBy('time','desc')->first()->id;
 	foreach($company_dividends as $company_dividend) {
             if ($company_dividend->profit_or_loss) {
@@ -148,7 +144,7 @@ class TransactionController extends Controller
                     $team->balance += ($company_dividend->dividend/$no_of_shares) * $dividend_factor; // company dividiend->dividend = profit
                     $team->save();
                 }
-                DB::delete("DELETE FROM company_dividends 
+                DB::delete("DELETE FROM company_dividends
                 WHERE company_id=$company_dividend->company_id;");
             }
         }
@@ -173,7 +169,6 @@ class TransactionController extends Controller
 
 	foreach ($shares as $share) {
 		$error_code = ControllerScopes::sell_share($share->team_id,$share->company_id,$share->amount);
-		
 	}
         //$session = new Session;
        // $session->save();

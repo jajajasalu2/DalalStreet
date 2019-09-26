@@ -107,7 +107,10 @@ trait ControllerScopes {
 			else {
 				$share->amount += $amount;
 			}
-		}
+        }
+        else if ($amount >= 2000) {
+            return 20;
+        }
 		else {
             $share = new Share;
             $share->team_id = $team_id;
@@ -232,11 +235,8 @@ trait ControllerScopes {
     	$shortsold_share = ShortsoldShare::where('team_id','=',$team_id)
 		    				->where('company_id','=',$company_id)
 						->first();
-//<<<<<<< HEAD
         $company = Company::where('id','=',$company_id)->first();
 	if (empty($team)) return 25;
-//=======
-//>>>>>>> 13f4051606af47232fae5dcd232754c2548f6d2a
         if ($amount == 0 || $amount < 0) {
             return 12;
         }
@@ -286,14 +286,14 @@ trait ControllerScopes {
     *            ControllerScopes::buy_back(1,1,1);
     */
     public static function buy_back($team_id,$company_id,$amount) {
-        //$share = Share::where('team_id','=',$team_id)
-        //                ->where('company_id','=',$company_id)
-        //                ->first();
-        //if (empty($share)) {
+        // $share = Share::where('team_id','=',$team_id)
+        //                 ->where('company_id','=',$company_id)
+        //                 ->first();
+        // if (empty($share)) {
         //    return 10;
         //}
 	$team = Team::where('id','=',$team_id)->first();
-        $company = Company::where('id','=',$company_id)->first();
+    $company = Company::where('id','=',$company_id)->first();
 	if (empty($team)) return 25;
 	if (empty($company)) return 26;
 	$shortsold_share = ShortsoldShare::where('team_id','=',$team_id)
