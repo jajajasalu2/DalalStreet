@@ -68,7 +68,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-	if ($data['counter_password'] == 'icantsay6699') {
+	if ($data['counter_password'] == env("COUNTER_PASSWORD")) {
 	$team = Team::where('id','=',$data['team'])->first();
 	if (empty($team)) {
 		$team = new Team;
