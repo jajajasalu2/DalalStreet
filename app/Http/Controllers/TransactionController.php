@@ -64,7 +64,7 @@ class TransactionController extends Controller
     }
 
     public function show($team_id) {
-	$error_code = ControllerScopes::security_check($team_id);	
+	$error_code = ControllerScopes::security_check($team_id);
 	if ($error_code) return back()->with('error',ControllerScopes::error($error_code));
         $transactions = Transaction::where('team_id','=',$team_id)->get();
         return view('transactions')->with('transactions',$transactions)
@@ -94,7 +94,7 @@ class TransactionController extends Controller
                     $team->balance += ($company_dividend->dividend/$no_of_shares) * $dividend_factor; // company dividiend->dividend = profit
                     $team->save();
                 }
-                DB::delete("DELETE FROM company_dividends 
+                DB::delete("DELETE FROM company_dividends
                 WHERE company_id=$company_dividend->company_id;");
             }
         }
@@ -144,7 +144,7 @@ class TransactionController extends Controller
                     $team->balance += ($company_dividend->dividend/$no_of_shares) * $dividend_factor; // company dividiend->dividend = profit
                     $team->save();
                 }
-                DB::delete("DELETE FROM company_dividends 
+                DB::delete("DELETE FROM company_dividends
                 WHERE company_id=$company_dividend->company_id;");
             }
         }
