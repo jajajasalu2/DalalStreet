@@ -98,7 +98,7 @@ class CompanyController extends Controller
         ]);
         $company = Company::where('id','=',$request->input('company_id'))->first();
         $company->name = $request->input('name');
-	$company->rate += $request->input('rate_change');
+	    $company->rate += $request->input('rate_change');
    //     $company->rate = $request->input('rate');
    //     $company->value = $request->input('value');
    //     $company->no_of_shares = $request->input('no_of_shares');
@@ -110,9 +110,9 @@ class CompanyController extends Controller
             if (empty($dividend)) {
                 $dividend = new CompanyDividend;
                 $dividend->company_id = $request->input('company_id');
-		$dividend->shares_per_dividend = $request->input('shares_per_dividend');
-		$dividend->dividend = $request->input('dividend');
-		$dividend->profit_or_loss = $request->input('profit_or_loss');
+                $dividend->shares_per_dividend = $request->input('shares_per_dividend');
+                $dividend->dividend = $request->input('dividend');
+                $dividend->profit_or_loss = $request->input('profit_or_loss');
                 DB::insert("INSERT INTO company_dividends
                 values($dividend->company_id,$dividend->dividend,$dividend->shares_per_dividend,$dividend->profit_or_loss);");
             }
