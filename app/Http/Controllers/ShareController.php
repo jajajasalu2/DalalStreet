@@ -11,7 +11,7 @@ class ShareController extends Controller
 {
     //create a new share of a team in a company
     public function create(Request $request) {
-        $this->validate(['company_id'=>'requried',
+        $this->validate($request, ['company_id'=>'requried',
         'team_id'=>'required',
         'amount'=>'requried']);
         $share = Share::new();
@@ -38,7 +38,7 @@ class ShareController extends Controller
 
     //update share
     public function update(Request $request) {
-        $this->validate([
+        $this->validate($request, [
             'company_id'=>'required',
             'team_id'=>'required',
             'amount'=>'required'
