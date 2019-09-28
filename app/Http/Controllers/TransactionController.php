@@ -122,6 +122,8 @@ class TransactionController extends Controller
                 $team->balance += $company_bonus->bonus * $bonus_factor;
                 $team->save();
             }
+            DB::delete("DELETE FROM company_bonuses
+            WHERE company_id=$company_dividend->company_id;");
         }
 
         foreach ($shortsold_shares as $shortsold_share) {
